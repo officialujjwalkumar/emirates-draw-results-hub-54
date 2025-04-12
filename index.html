@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="src/components/ResultCard.js" defer></script>
+    <script src="script.js" defer></script>
 </head>
 <body class="light-mode">
     <div class="toast-notification" id="refresh-toast">
@@ -23,7 +25,7 @@
             <nav>
                 <div class="logo">
                     <a href="index.html">
-                        <img src="https://emiratesdraw.com/images/logo.png" alt="Emirates Draw">
+                        <img src="https://emiratesdraw.com/images/logo.png" alt="Emirates Draw" onerror="this.src='https://via.placeholder.com/50x50?text=ED'">
                         <h1>Emirates Draw</h1>
                     </a>
                 </div>
@@ -31,7 +33,7 @@
                 <div class="nav-right">
                     <button id="theme-toggle" class="theme-toggle">
                         <i class="fas fa-moon moon-icon"></i>
-                        <i class="fas fa-sun sun-icon"></i>
+                        <i class="fas fa-sun sun-icon" style="display: none;"></i>
                         <span class="theme-text">Dark Mode</span>
                     </button>
                     
@@ -48,6 +50,13 @@
                             <li><a href="easy6.html">Easy6</a></li>
                             <li><a href="fast5.html">Fast5</a></li>
                             <li><a href="blog.html">Blog</a></li>
+                            <li class="mobile-only">
+                                <button id="mobile-theme-toggle" class="theme-toggle mobile-theme-toggle">
+                                    <i class="fas fa-moon moon-icon"></i>
+                                    <i class="fas fa-sun sun-icon" style="display: none;"></i>
+                                    <span class="theme-text">Dark Mode</span>
+                                </button>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -67,7 +76,7 @@
                     </div>
                 </div>
                 <div class="hero-image">
-                    <img src="https://emiratesdraw.com/images/hero-image.png" alt="Emirates Draw">
+                    <img src="https://emiratesdraw.com/images/hero-image.png" alt="Emirates Draw" onerror="this.src='https://via.placeholder.com/400x300?text=Emirates+Draw'">
                 </div>
             </div>
         </section>
@@ -122,7 +131,7 @@
                 <div class="blog-container">
                     <div class="blog-card">
                         <div class="blog-image">
-                            <img src="https://emiratesdraw.com/images/blog/lucky-numbers.jpg" alt="Lucky Numbers">
+                            <img src="https://emiratesdraw.com/images/blog/lucky-numbers.jpg" alt="Lucky Numbers" onerror="this.src='https://via.placeholder.com/300x200?text=Lucky+Numbers'">
                         </div>
                         <div class="blog-content">
                             <h3>Finding Your Lucky Numbers</h3>
@@ -133,7 +142,7 @@
                     
                     <div class="blog-card">
                         <div class="blog-image">
-                            <img src="https://emiratesdraw.com/images/blog/winners-stories.jpg" alt="Winners Stories">
+                            <img src="https://emiratesdraw.com/images/blog/winners-stories.jpg" alt="Winners Stories" onerror="this.src='https://via.placeholder.com/300x200?text=Winners+Stories'">
                         </div>
                         <div class="blog-content">
                             <h3>Recent Winners' Stories</h3>
@@ -144,7 +153,7 @@
                     
                     <div class="blog-card">
                         <div class="blog-image">
-                            <img src="https://emiratesdraw.com/images/blog/draw-process.jpg" alt="Draw Process">
+                            <img src="https://emiratesdraw.com/images/blog/draw-process.jpg" alt="Draw Process" onerror="this.src='https://via.placeholder.com/300x200?text=Draw+Process'">
                         </div>
                         <div class="blog-content">
                             <h3>How the Draw Process Works</h3>
@@ -161,7 +170,7 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">
-                    <img src="https://emiratesdraw.com/images/logo.png" alt="Emirates Draw">
+                    <img src="https://emiratesdraw.com/images/logo.png" alt="Emirates Draw" onerror="this.src='https://via.placeholder.com/50x50?text=ED'">
                     <h3>Emirates Draw</h3>
                     <p>Your chance to win life-changing prizes while making a difference.</p>
                 </div>
@@ -209,7 +218,5 @@
     <div class="floating-refresh-button" id="floating-refresh">
         <i class="fas fa-sync-alt"></i>
     </div>
-    
-    <script src="script.js"></script>
 </body>
 </html>

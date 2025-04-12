@@ -16,9 +16,17 @@ document.addEventListener('DOMContentLoaded', function() {
   // Check if user previously set a theme preference
   const savedTheme = localStorage.getItem('theme');
   if (savedTheme === 'dark') {
-    body.classList.remove('light-mode');
     body.classList.add('dark-mode');
+    body.classList.remove('light-mode');
     themeText.textContent = 'Light Mode';
+    moonIcon.style.display = 'none';
+    sunIcon.style.display = 'inline-block';
+  } else {
+    body.classList.add('light-mode');
+    body.classList.remove('dark-mode');
+    themeText.textContent = 'Dark Mode';
+    moonIcon.style.display = 'inline-block';
+    sunIcon.style.display = 'none';
   }
   
   themeToggle.addEventListener('click', function() {
@@ -28,11 +36,15 @@ document.addEventListener('DOMContentLoaded', function() {
       body.classList.remove('dark-mode');
       body.classList.add('light-mode');
       themeText.textContent = 'Dark Mode';
+      moonIcon.style.display = 'inline-block';
+      sunIcon.style.display = 'none';
       localStorage.setItem('theme', 'light');
     } else {
       body.classList.remove('light-mode');
       body.classList.add('dark-mode');
       themeText.textContent = 'Light Mode';
+      moonIcon.style.display = 'none';
+      sunIcon.style.display = 'inline-block';
       localStorage.setItem('theme', 'dark');
     }
   });
@@ -44,6 +56,18 @@ document.addEventListener('DOMContentLoaded', function() {
   mobileMenuButton.addEventListener('click', function() {
     mobileMenuButton.classList.toggle('active');
     menu.classList.toggle('active');
+    
+    // Update menu button appearance for close icon
+    const spans = mobileMenuButton.querySelectorAll('span');
+    if (mobileMenuButton.classList.contains('active')) {
+      spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+      spans[1].style.opacity = '0';
+      spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+    } else {
+      spans[0].style.transform = 'none';
+      spans[1].style.opacity = '1';
+      spans[2].style.transform = 'none';
+    }
   });
   
   // Filter tabs functionality
@@ -91,9 +115,56 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
+  // Close menu when clicking outside
+  document.addEventListener('click', function(event) {
+    if (menu.classList.contains('active') && 
+        !menu.contains(event.target) && 
+        !mobileMenuButton.contains(event.target)) {
+      menu.classList.remove('active');
+      mobileMenuButton.classList.remove('active');
+      
+      // Reset menu button appearance
+      const spans = mobileMenuButton.querySelectorAll('span');
+      spans[0].style.transform = 'none';
+      spans[1].style.opacity = '1';
+      spans[2].style.transform = 'none';
+    }
+  });
+  
   // Initial data fetch
   fetchResults();
+  
+  // Fix image loading issues
+  fixImageLoading();
 });
+
+// Fix image loading issues
+function fixImageLoading() {
+  const images = document.querySelectorAll('img');
+  
+  images.forEach(img => {
+    // Add error handler to replace broken images
+    img.onerror = function() {
+      // Check if it's a blog or hero image
+      if (img.src.includes('blog')) {
+        this.src = 'https://emiratesdraw.com/images/placeholder.jpg';
+      } else if (img.src.includes('hero-image')) {
+        this.src = 'https://emiratesdraw.com/images/hero-placeholder.jpg';
+      } else if (img.src.includes('logo')) {
+        this.src = 'https://emiratesdraw.com/images/logo-placeholder.png';
+      }
+      
+      this.onerror = null; // Prevent infinite loop
+    };
+    
+    // Force reload images
+    const currentSrc = img.src;
+    img.src = '';
+    setTimeout(() => {
+      img.src = currentSrc;
+    }, 10);
+  });
+}
 
 // Fetch results data
 function fetchResults() {
@@ -204,13 +275,23 @@ function displayResults(containerId) {
   
   // Display each result
   filteredResults.forEach(result => {
-    const resultCard = createResultCard(result);
-    resultsContainer.appendChild(resultCard);
+    try {
+      const resultCard = createResultCard(result);
+      resultsContainer.appendChild(resultCard);
+    } catch (error) {
+      console.error('Error creating result card:', error);
+      resultsContainer.innerHTML += `<div class="error-card">Error loading result. Please try again.</div>`;
+    }
   });
 }
 
 // Create a result card element
 function createResultCard(data) {
+  // Use the imported function if available, otherwise use the inline version
+  if (typeof window.createResultCard === 'function') {
+    return window.createResultCard(data);
+  }
+  
   const card = document.createElement('div');
   card.className = 'result-card';
   
@@ -283,7 +364,7 @@ function createResultCard(data) {
       <div class="raffle-winners">
         <h4>Raffle Winners</h4>
         <button class="view-winners-btn">Click to View</button>
-        <div class="raffle-winners-list">
+        <div class="raffle-winners-list" style="display: none;">
           ${data.raffle_winners.map(winner => 
             `<div class="raffle-winner-item">
               <span>${winner.id}</span>
@@ -300,13 +381,9 @@ function createResultCard(data) {
   const raffleWinnersList = card.querySelector('.raffle-winners-list');
   
   viewWinnersBtn.addEventListener('click', function() {
-    if (raffleWinnersList.style.display === 'block') {
-      raffleWinnersList.style.display = 'none';
-      viewWinnersBtn.textContent = 'Click to View';
-    } else {
-      raffleWinnersList.style.display = 'block';
-      viewWinnersBtn.textContent = 'Hide Winners';
-    }
+    const isVisible = raffleWinnersList.style.display !== 'none';
+    raffleWinnersList.style.display = isVisible ? 'none' : 'block';
+    viewWinnersBtn.textContent = isVisible ? 'Click to View' : 'Hide Winners';
   });
   
   const cardRefreshBtn = card.querySelector('.card-refresh-btn');
@@ -358,3 +435,7 @@ function showToast(message) {
     toast.classList.remove('active');
   }, 3000);
 }
+
+// Make sure these functions are globally accessible
+window.fetchResults = fetchResults;
+window.showToast = showToast;

@@ -1,26 +1,68 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>emirates-draw-results-hub</title>
-    <meta name="description" content="Lovable Generated Project" />
-    <meta name="author" content="Lovable" />
-
-    <meta property="og:title" content="emirates-draw-results-hub" />
-    <meta property="og:description" content="Lovable Generated Project" />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@lovable_dev" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <title>Emirates Draw Results Hub</title>
+    <meta name="description" content="Latest Emirates Draw Results - Mega7, Easy6, Fast5" />
+    <link rel="icon" href="https://i0.wp.com/emiratesdrawwinners.com/wp-content/uploads/2024/11/cropped-emirates-logo.webp?w=512&ssl=1" type="image/webp">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
   </head>
 
   <body>
-    <div id="root"></div>
-    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
-    <script type="module" src="/src/main.tsx"></script>
+    <header>
+      <div class="container">
+        <nav>
+          <div class="logo">
+            <img src="https://i0.wp.com/emiratesdrawwinners.com/wp-content/uploads/2024/11/cropped-emirates-logo.webp?w=512&ssl=1" alt="Emirates Draw Logo">
+            <h1>Emirates Draw Results</h1>
+          </div>
+          <div class="last-updated">
+            <span>Last Updated: </span>
+            <span id="update-time">Fetching...</span>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <div class="hero">
+          <img src="https://i0.wp.com/emiratesdrawwinners.com/wp-content/uploads/2024/11/emirates-results-today.jpg?resize=1024%2C538&ssl=1" alt="Emirates Draw Results Banner">
+        </div>
+        
+        <div class="refresh-status">
+          <div class="spinner" id="loading-spinner"></div>
+          <p id="refresh-message">Fetching latest results...</p>
+        </div>
+        
+        <div class="results-wrapper">
+          <h2>Latest Draw Results</h2>
+          <div id="results-container" class="results-container">
+            <!-- Results will be populated here by JavaScript -->
+            <div class="loading-placeholder">
+              <div class="loading-card"></div>
+              <div class="loading-card"></div>
+              <div class="loading-card"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p>&copy; 2025 Emirates Draw Results Hub. All Rights Reserved.</p>
+        <p>Data refreshes automatically. This is not an official Emirates Draw website.</p>
+      </div>
+    </footer>
+    
+    <script src="script.js"></script>
   </body>
 </html>

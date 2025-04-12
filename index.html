@@ -8,9 +8,10 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="light-mode">
-    <div class="toast" id="refresh-toast">
+    <div class="toast-notification" id="refresh-toast">
         <div class="toast-content">
             <i class="fas fa-check-circle"></i>
             <div class="toast-message">Results refreshed successfully!</div>
@@ -18,116 +19,138 @@
     </div>
     
     <header>
-        <div class="logo">
-            <a href="index.html">
-                <img src="https://emiratesdraw.com/images/logo.png" alt="Emirates Draw">
-            </a>
-        </div>
-        <nav class="menu">
-            <ul>
-                <li><a href="index.html" class="active">Home</a></li>
-                <li><a href="mega7.html">Mega7</a></li>
-                <li><a href="easy6.html">Easy6</a></li>
-                <li><a href="fast5.html">Fast5</a></li>
-                <li><a href="blog.html">Blog</a></li>
-            </ul>
-        </nav>
-        <div class="header-right">
-            <button id="theme-toggle">
-                <i class="fas fa-moon"></i>
-                <span>Dark Mode</span>
-            </button>
-            <button class="mobile-menu-button">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <a href="index.html">
+                        <img src="https://emiratesdraw.com/images/logo.png" alt="Emirates Draw">
+                        <h1>Emirates Draw</h1>
+                    </a>
+                </div>
+                
+                <div class="nav-right">
+                    <button id="theme-toggle" class="theme-toggle">
+                        <i class="fas fa-moon moon-icon"></i>
+                        <i class="fas fa-sun sun-icon"></i>
+                        <span class="theme-text">Dark Mode</span>
+                    </button>
+                    
+                    <div class="menu-container">
+                        <div class="mobile-menu-button">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        
+                        <ul class="menu">
+                            <li><a href="index.html" class="active">Home</a></li>
+                            <li><a href="mega7.html">Mega7</a></li>
+                            <li><a href="easy6.html">Easy6</a></li>
+                            <li><a href="fast5.html">Fast5</a></li>
+                            <li><a href="blog.html">Blog</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
         </div>
     </header>
     
     <main>
         <section class="hero">
-            <div class="hero-content">
-                <h1>Emirates Draw Results</h1>
-                <p>Check the latest results for Mega7, Easy6, and Fast5 draws</p>
-                <div class="actions">
-                    <a href="#latest-results" class="btn primary">View Latest Results</a>
-                    <a href="blog.html" class="btn secondary">Read Our Blog</a>
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Emirates Draw Results</h1>
+                    <p>Check the latest results for Mega7, Easy6, and Fast5 draws</p>
+                    <div class="actions">
+                        <a href="#latest-results" class="btn primary">View Latest Results</a>
+                        <a href="blog.html" class="btn secondary">Read Our Blog</a>
+                    </div>
                 </div>
-            </div>
-            <div class="hero-image">
-                <img src="https://emiratesdraw.com/images/hero-image.png" alt="Emirates Draw">
+                <div class="hero-image">
+                    <img src="https://emiratesdraw.com/images/hero-image.png" alt="Emirates Draw">
+                </div>
             </div>
         </section>
         
         <section id="latest-results" class="latest-results">
-            <div class="section-header">
-                <h2>Latest Draw Results</h2>
-                <div class="updates">
-                    <span>Last Updated: <span id="update-time">Loading...</span></span>
-                    <button id="refresh-button" class="refresh-btn">
-                        <i class="fas fa-sync-alt"></i> Refresh
-                    </button>
+            <div class="container">
+                <div class="section-header">
+                    <h2>Latest Draw Results</h2>
+                    <div class="updates">
+                        <span>Last Updated: <span id="update-time">Loading...</span></span>
+                        <button id="refresh-button" class="refresh-btn">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="results-tabs">
-                <div class="tab active" data-tab="all">All Results</div>
-                <div class="tab" data-tab="Mega7">Mega7</div>
-                <div class="tab" data-tab="Easy6">Easy6</div>
-                <div class="tab" data-tab="Fast5">Fast5</div>
-            </div>
-            
-            <div class="results-container" id="all-results-container">
-                <!-- Results will be loaded here -->
+                
+                <div class="filter-tabs">
+                    <div class="filter-tab active" data-filter="all">All Results</div>
+                    <div class="filter-tab" data-filter="Mega7">Mega7</div>
+                    <div class="filter-tab" data-filter="Easy6">Easy6</div>
+                    <div class="filter-tab" data-filter="Fast5">Fast5</div>
+                </div>
+                
+                <div class="results-container" id="results-container">
+                    <!-- Results will be loaded here by JavaScript -->
+                    <div class="loading-placeholder">
+                        <div class="loading-card"></div>
+                        <div class="loading-card"></div>
+                        <div class="loading-card"></div>
+                    </div>
+                </div>
             </div>
         </section>
         
         <section class="cta">
-            <div class="cta-content">
-                <h2>Ready to Try Your Luck?</h2>
-                <p>Join millions of participants in the Emirates Draw for a chance to win life-changing prizes!</p>
-                <a href="https://emiratesdraw.com" class="btn primary" target="_blank">Participate Now</a>
+            <div class="container">
+                <div class="cta-content">
+                    <h2>Check Your Emirates Draw Results</h2>
+                    <p>Stay up-to-date with the latest results from Emirates Draw. The website is updated after each draw.</p>
+                    <a href="https://emiratesdraw.com" class="btn primary" target="_blank">Official Website</a>
+                </div>
             </div>
         </section>
         
         <section class="featured-blog">
-            <div class="section-header">
-                <h2>Featured Articles</h2>
-                <a href="blog.html" class="view-all">View All Articles</a>
-            </div>
-            
-            <div class="blog-cards">
-                <div class="blog-card">
-                    <div class="blog-card-image">
-                        <img src="https://emiratesdraw.com/images/blog/lucky-numbers.jpg" alt="Lucky Numbers">
-                    </div>
-                    <div class="blog-card-content">
-                        <h3>Finding Your Lucky Numbers</h3>
-                        <p>Discover strategies for selecting potentially winning numbers for your next draw.</p>
-                        <a href="blog-lucky-numbers.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
-                    </div>
+            <div class="container">
+                <div class="section-header">
+                    <h2>Featured Articles</h2>
+                    <a href="blog.html" class="view-all">View All Articles</a>
                 </div>
                 
-                <div class="blog-card">
-                    <div class="blog-card-image">
-                        <img src="https://emiratesdraw.com/images/blog/winners-stories.jpg" alt="Winners Stories">
+                <div class="blog-container">
+                    <div class="blog-card">
+                        <div class="blog-image">
+                            <img src="https://emiratesdraw.com/images/blog/lucky-numbers.jpg" alt="Lucky Numbers">
+                        </div>
+                        <div class="blog-content">
+                            <h3>Finding Your Lucky Numbers</h3>
+                            <p>Discover strategies for selecting potentially winning numbers for your next draw.</p>
+                            <a href="blog.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                        </div>
                     </div>
-                    <div class="blog-card-content">
-                        <h3>Recent Winners' Stories</h3>
-                        <p>Read inspiring stories from recent Emirates Draw winners and how it changed their lives.</p>
-                        <a href="blog.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    
+                    <div class="blog-card">
+                        <div class="blog-image">
+                            <img src="https://emiratesdraw.com/images/blog/winners-stories.jpg" alt="Winners Stories">
+                        </div>
+                        <div class="blog-content">
+                            <h3>Recent Winners' Stories</h3>
+                            <p>Read inspiring stories from recent Emirates Draw winners and how it changed their lives.</p>
+                            <a href="blog.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                        </div>
                     </div>
-                </div>
-                
-                <div class="blog-card">
-                    <div class="blog-card-image">
-                        <img src="https://emiratesdraw.com/images/blog/draw-process.jpg" alt="Draw Process">
-                    </div>
-                    <div class="blog-card-content">
-                        <h3>How the Draw Process Works</h3>
-                        <p>Learn about the transparent and fair process used in the Emirates Draw.</p>
-                        <a href="blog.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    
+                    <div class="blog-card">
+                        <div class="blog-image">
+                            <img src="https://emiratesdraw.com/images/blog/draw-process.jpg" alt="Draw Process">
+                        </div>
+                        <div class="blog-content">
+                            <h3>How the Draw Process Works</h3>
+                            <p>Learn about the transparent and fair process used in the Emirates Draw.</p>
+                            <a href="blog.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -135,58 +158,58 @@
     </main>
     
     <footer>
-        <div class="footer-top">
-            <div class="footer-logo">
-                <img src="https://emiratesdraw.com/images/logo.png" alt="Emirates Draw">
-                <p>Your chance to win life-changing prizes while making a difference.</p>
-            </div>
-            
-            <div class="footer-links">
-                <div class="footer-column">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="mega7.html">Mega7</a></li>
-                        <li><a href="easy6.html">Easy6</a></li>
-                        <li><a href="fast5.html">Fast5</a></li>
-                        <li><a href="blog.html">Blog</a></li>
-                    </ul>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="https://emiratesdraw.com/images/logo.png" alt="Emirates Draw">
+                    <h3>Emirates Draw</h3>
+                    <p>Your chance to win life-changing prizes while making a difference.</p>
                 </div>
                 
-                <div class="footer-column">
-                    <h4>Contact Us</h4>
-                    <ul>
-                        <li><a href="mailto:info@emiratesdraw.com">info@emiratesdraw.com</a></li>
-                        <li><a href="tel:+97144440459">+971 4 444 0459</a></li>
-                        <li>Emirates Draw LLC, Dubai, UAE</li>
-                    </ul>
-                </div>
-                
-                <div class="footer-column">
-                    <h4>Follow Us</h4>
-                    <div class="social-links">
-                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Quick Links</h4>
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="mega7.html">Mega7</a></li>
+                            <li><a href="easy6.html">Easy6</a></li>
+                            <li><a href="fast5.html">Fast5</a></li>
+                            <li><a href="blog.html">Blog</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>Contact Us</h4>
+                        <ul>
+                            <li><a href="mailto:info@emiratesdraw.com">info@emiratesdraw.com</a></li>
+                            <li><a href="tel:+97144440459">+971 4 444 0459</a></li>
+                            <li>Emirates Draw LLC, Dubai, UAE</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>Follow Us</h4>
+                        <div class="social-links">
+                            <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="footer-bottom">
-            <p>&copy; 2023 Emirates Draw. All rights reserved.</p>
-            <div class="footer-bottom-links">
-                <a href="#">Terms & Conditions</a>
-                <a href="#">Privacy Policy</a>
-                <a href="#">Responsible Gaming</a>
+            
+            <div class="copyright">
+                <p>&copy; 2025 Emirates Draw Results Hub. All Rights Reserved.</p>
+                <p>Data refreshes automatically. This is not an official Emirates Draw website.</p>
             </div>
         </div>
     </footer>
     
-    <!-- Add the GPT Engineer script tag for Lovable features -->
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+    <div class="floating-refresh-button" id="floating-refresh">
+        <i class="fas fa-sync-alt"></i>
+    </div>
+    
     <script src="script.js"></script>
-    <script src="game-pages.js"></script>
 </body>
 </html>

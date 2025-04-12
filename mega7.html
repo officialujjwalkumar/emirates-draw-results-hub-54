@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mega7 Results - Emirates Draw</title>
-    <meta name="description" content="Latest Mega7 Draw Results - Win up to AED 100,000,000 in Emirates Draw Mega7!" />
+    <meta name="description" content="Latest Mega7 Draw Results - Win up to AED 100 Million in Emirates Draw Mega7!" />
     <meta name="keywords" content="Emirates Draw, Mega7 results, Mega7 lottery, UAE lottery, raffle winners" />
     <link rel="icon" href="https://i0.wp.com/emiratesdrawwinners.com/wp-content/uploads/2024/11/cropped-emirates-logo.webp?w=512&ssl=1" type="image/webp">
     <link rel="stylesheet" href="styles.css">
@@ -16,33 +16,6 @@
   </head>
 
   <body class="light-mode">
-    <div class="theme-toggle-container">
-      <button id="theme-toggle" aria-label="Toggle dark/light mode">
-        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="5"></circle>
-          <line x1="12" y1="1" x2="12" y2="3"></line>
-          <line x1="12" y1="21" x2="12" y2="23"></line>
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-          <line x1="1" y1="12" x2="3" y2="12"></line>
-          <line x1="21" y1="12" x2="23" y2="12"></line>
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-        </svg>
-        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-        </svg>
-      </button>
-    </div>
-    
-    <div class="floating-refresh-button" id="refresh-button" aria-label="Refresh data">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M23 4v6h-6"></path>
-        <path d="M1 20v-6h6"></path>
-        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-      </svg>
-    </div>
-    
     <div class="toast-notification" id="refresh-toast">
       <div class="toast-content">
         <svg class="toast-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -61,6 +34,12 @@
           </div>
           
           <div class="nav-right">
+            <button id="theme-toggle" class="theme-toggle">
+              <i class="fas fa-moon moon-icon"></i>
+              <i class="fas fa-sun sun-icon"></i>
+              <span class="theme-text">Dark Mode</span>
+            </button>
+            
             <div class="menu-container">
               <div class="mobile-menu-button">
                 <span></span>
@@ -88,7 +67,7 @@
             <h2>MEGA7</h2>
             <div class="prize-amount">AED 100,000,000</div>
             <p class="countdown">Draw Every Sunday at 9 PM</p>
-            <a href="https://emiratesdraw.com" class="play-button">Play Now</a>
+            <a href="https://emiratesdraw.com" class="play-button">Check Results</a>
           </div>
         </div>
         
@@ -96,6 +75,12 @@
         <div class="last-updated">
           <span>Last Updated: </span>
           <span id="update-time">Fetching...</span>
+        </div>
+        
+        <div class="refresh-container">
+          <button id="refresh-button" class="refresh-btn">
+            <i class="fas fa-sync-alt"></i> Refresh Results
+          </button>
         </div>
         
         <div id="mega7-results-container" class="results-container">
@@ -109,9 +94,9 @@
         <div class="mega7-info-section">
           <h2 class="section-title">About MEGA7</h2>
           <div class="game-description">
-            <p>MEGA7 is Emirates Draw's premier game offering players the chance to win the Middle East's largest Grand Prize of AED 100,000,000.</p>
-            <p>Players select 7 numbers from 1 to 35. Match all 7 numbers in any order to win the Grand Prize. There are also fantastic prizes for matching fewer numbers.</p>
-            <p>MEGA7 draws are held every Sunday at 9 PM. Don't miss your chance to become a millionaire!</p>
+            <p>MEGA7 is Emirates Draw's flagship game offering players a chance to win up to AED 100,000,000!</p>
+            <p>Players select 7 numbers from 1 to 50. Match all 7 numbers in any order to win the Grand Prize. There are also fantastic prizes for matching fewer numbers.</p>
+            <p>MEGA7 draws are held every Sunday at 9 PM. Don't miss your chance to become a multi-millionaire!</p>
           </div>
           
           <div class="prize-structure">
@@ -152,17 +137,12 @@
         <div class="content-section">
           <h2 class="section-title">Emirates Draw MEGA7</h2>
           <div class="content-text">
-            <p>Emirates Lucky Draw is one of the biggest tournaments in the world and attracts players from all over. Check your latest Emirates draw results today. This raffle aims to better the lives of Dubai's inhabitants, and a substantial portion of the proceeds will go to Fujairah's Coral Reef Program, which protects biodiversity and marine life. This is one of the unique draws held in Dubai for Dubai Residents and other Country people.</p>
+            <p>Emirates Lucky Draw is one of the biggest tournaments in the world and attracts players from all over. Check your latest Emirates draw results today. This raffle aims to better the lives of Dubai's inhabitants, and a substantial portion of the proceeds will go to Fujairah's Coral Reef Program, which protects biodiversity and marine life.</p>
             
-            <p>The MEGA7 draw is entirely online. All players need to do is buy a ticket for AED 50. The lucky person who gets any of these winning numbers is declared a winner and receives prize money according to the matching numbers.</p>
+            <p>MEGA7 is an exciting game where participants select 7 numbers from a pool of 50 numbers. The lucky person who gets all seven winning numbers is declared a winner and receives AED 100,000,000 in prize money. There are also prizes for matching fewer numbers.</p>
             
-            <h3>How to Increase Chances of Winning in Emirates MEGA7 Draw?</h3>
-            <p>Luck is the only thing that matters, and you can increase your chances of winning by purchasing more tickets. The more tickets that you buy, the greater chance you have to get a winning number.</p>
-            
-            <h3>How To Enter into Emirates MEGA7 Draw?</h3>
-            <p>Just create an account with Emirates Draw and then play the lottery game. Login with the details and buy the tickets as per your wish from the official app and website. You can also purchase tickets before the draw.</p>
-            
-            <p>You can choose to have a perk that assigns you a seven-digit number or the system will do it for you. Lock your selected numbers; once you have locked them, no one can choose them.</p>
+            <h3>How to Check Your Emirates MEGA7 Draw Results</h3>
+            <p>You can check your MEGA7 draw results right here on our website. We update our results immediately after each draw. Simply match your numbers against the winning numbers displayed above.</p>
           </div>
         </div>
       </div>
@@ -211,6 +191,10 @@
         </div>
       </div>
     </footer>
+    
+    <div class="floating-refresh-button" id="floating-refresh">
+      <i class="fas fa-sync-alt"></i>
+    </div>
     
     <script src="game-pages.js"></script>
   </body>

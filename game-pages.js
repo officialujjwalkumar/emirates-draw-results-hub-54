@@ -1,46 +1,301 @@
 
-// Constants
-const RESULTS_STORAGE_KEY = 'emirates_draw_results';
-const DARK_MODE_STORAGE_KEY = 'dark_mode_enabled';
-
-// Elements
-const updateTimeElement = document.getElementById('update-time');
-const mega7ResultsContainer = document.getElementById('mega7-results-container');
-const easy6ResultsContainer = document.getElementById('easy6-results-container');
-const fast5ResultsContainer = document.getElementById('fast5-results-container');
-const themeToggle = document.getElementById('theme-toggle');
-const mobileMenuButton = document.querySelector('.mobile-menu-button');
-const mobileMenu = document.querySelector('.menu');
-const refreshButton = document.getElementById('refresh-button');
-const refreshToast = document.getElementById('refresh-toast');
-const body = document.body;
-
-// Check for saved theme preference
-function loadThemePreference() {
-    const isDarkMode = localStorage.getItem(DARK_MODE_STORAGE_KEY) === 'true';
-    if (isDarkMode) {
-        body.classList.remove('light-mode');
-        body.classList.add('dark-mode');
-    } else {
+document.addEventListener('DOMContentLoaded', function() {
+  // Theme toggle functionality
+  const themeToggle = document.getElementById('theme-toggle');
+  const body = document.body;
+  const moonIcon = document.querySelector('.moon-icon');
+  const sunIcon = document.querySelector('.sun-icon');
+  
+  // Check if user previously set a theme preference
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark') {
+    body.classList.remove('light-mode');
+    body.classList.add('dark-mode');
+  }
+  
+  if (themeToggle) {
+    themeToggle.addEventListener('click', function() {
+      const isDarkMode = body.classList.contains('dark-mode');
+      
+      if (isDarkMode) {
         body.classList.remove('dark-mode');
         body.classList.add('light-mode');
-    }
-}
-
-// Toggle theme
-if (themeToggle) {
-    themeToggle.addEventListener('click', function() {
-        body.classList.toggle('dark-mode');
-        body.classList.toggle('light-mode');
-        
-        // Save preference
-        const isDarkMode = body.classList.contains('dark-mode');
-        localStorage.setItem(DARK_MODE_STORAGE_KEY, isDarkMode);
+        localStorage.setItem('theme', 'light');
+      } else {
+        body.classList.remove('light-mode');
+        body.classList.add('dark-mode');
+        localStorage.setItem('theme', 'dark');
+      }
     });
-}
-
-// Format date to display in a more readable format
-function formatDate(dateStr) {
+  }
+  
+  // Mobile menu functionality
+  const mobileMenuButton = document.querySelector('.mobile-menu-button');
+  const menu = document.querySelector('.menu');
+  
+  if (mobileMenuButton && menu) {
+    mobileMenuButton.addEventListener('click', function() {
+      mobileMenuButton.classList.toggle('active');
+      menu.classList.toggle('active');
+    });
+  }
+  
+  // Detect which game page we're on
+  const pagePath = window.location.pathname;
+  let gameType = 'all';
+  
+  if (pagePath.includes('mega7')) {
+    gameType = 'Mega7';
+  } else if (pagePath.includes('easy6')) {
+    gameType = 'Easy6';
+  } else if (pagePath.includes('fast5')) {
+    gameType = 'Fast5';
+  }
+  
+  // Refresh button functionality
+  const refreshButton = document.getElementById('refresh-button');
+  const floatingRefresh = document.getElementById('floating-refresh');
+  
+  if (refreshButton) {
+    refreshButton.addEventListener('click', function() {
+      this.classList.add('rotating');
+      fetchGameResults();
+      
+      setTimeout(() => {
+        this.classList.remove('rotating');
+        showToast('Results refreshed successfully!');
+      }, 1000);
+    });
+  }
+  
+  if (floatingRefresh) {
+    floatingRefresh.addEventListener('click', function() {
+      this.classList.add('rotating');
+      fetchGameResults();
+      
+      setTimeout(() => {
+        this.classList.remove('rotating');
+        showToast('Results refreshed successfully!');
+      }, 1000);
+    });
+  }
+  
+  // Initial fetch
+  fetchGameResults();
+  
+  // Fetch game-specific results
+  function fetchGameResults() {
+    const resultsContainer = document.getElementById(`${gameType.toLowerCase()}-results-container`);
+    if (!resultsContainer) return;
+    
+    // Show loading state
+    resultsContainer.innerHTML = `
+      <div class="loading-placeholder">
+        <div class="loading-card"></div>
+        <div class="loading-card"></div>
+      </div>
+    `;
+    
+    // Simulate fetch with timeout
+    setTimeout(() => {
+      // Mock data based on game type
+      let results = [];
+      
+      if (gameType === 'Mega7') {
+        results = [
+          {
+            id: 1,
+            draw_type: 'Mega7',
+            date: '12-04-2025',
+            winning_numbers: ['7', '14', '22', '31', '38', '46', '50'],
+            total_winners: 143,
+            total_prizes: 'AED 100,000,000',
+            raffle_winners: [
+              { id: 'ED-2345678', prize: 'AED 10,000' },
+              { id: 'ED-3456789', prize: 'AED 5,000' }
+            ]
+          },
+          {
+            id: 4,
+            draw_type: 'Mega7',
+            date: '05-04-2025',
+            winning_numbers: ['3', '11', '18', '24', '36', '41', '49'],
+            total_winners: 112,
+            total_prizes: 'AED 100,000,000',
+            raffle_winners: [
+              { id: 'ED-5678901', prize: 'AED 10,000' },
+              { id: 'ED-6789012', prize: 'AED 5,000' }
+            ]
+          }
+        ];
+      } else if (gameType === 'Easy6') {
+        results = [
+          {
+            id: 2,
+            draw_type: 'Easy6',
+            date: '10-04-2025',
+            winning_numbers: ['5', '12', '18', '27', '33', '44'],
+            total_winners: 92,
+            total_prizes: 'AED 15,000,000',
+            raffle_winners: [
+              { id: 'ED-1234567', prize: 'AED 5,000' },
+              { id: 'ED-2345678', prize: 'AED 2,500' }
+            ]
+          },
+          {
+            id: 5,
+            draw_type: 'Easy6',
+            date: '03-04-2025',
+            winning_numbers: ['8', '15', '22', '29', '35', '40'],
+            total_winners: 85,
+            total_prizes: 'AED 15,000,000',
+            raffle_winners: [
+              { id: 'ED-7890123', prize: 'AED 5,000' },
+              { id: 'ED-8901234', prize: 'AED 2,500' }
+            ]
+          }
+        ];
+      } else if (gameType === 'Fast5') {
+        results = [
+          {
+            id: 3,
+            draw_type: 'Fast5',
+            date: '11-04-2025',
+            winning_numbers: ['3', '9', '15', '25', '37'],
+            total_winners: 78,
+            total_prizes: 'AED 25,000',
+            raffle_winners: [
+              { id: 'ED-3456789', prize: 'AED 2,500' },
+              { id: 'ED-4567890', prize: 'AED 1,500' }
+            ]
+          },
+          {
+            id: 6,
+            draw_type: 'Fast5',
+            date: '04-04-2025',
+            winning_numbers: ['7', '13', '22', '28', '33'],
+            total_winners: 64,
+            total_prizes: 'AED 25,000',
+            raffle_winners: [
+              { id: 'ED-9012345', prize: 'AED 2,500' },
+              { id: 'ED-0123456', prize: 'AED 1,500' }
+            ]
+          }
+        ];
+      }
+      
+      // Display results
+      displayGameResults(results, resultsContainer);
+      
+      // Update time stamp
+      updateTimeStamp();
+    }, 1000);
+  }
+  
+  // Display results
+  function displayGameResults(results, container) {
+    // Clear container
+    container.innerHTML = '';
+    
+    if (results.length === 0) {
+      container.innerHTML = '<div class="no-results">No results found.</div>';
+      return;
+    }
+    
+    // Create a results grid
+    results.forEach(result => {
+      const card = document.createElement('div');
+      card.className = 'result-card';
+      
+      const headerClass = `${result.draw_type.toLowerCase()}-header`;
+      const numberClass = `number ${result.draw_type.toLowerCase()}-number`;
+      
+      // Get draw day
+      let drawDay = 'Sunday';
+      if (result.draw_type === 'Easy6') drawDay = 'Friday';
+      if (result.draw_type === 'Fast5') drawDay = 'Saturday';
+      
+      // Format date
+      const formattedDate = formatDate(result.date);
+      
+      card.innerHTML = `
+        <div class="card-header ${headerClass}">
+          <h3>${result.draw_type}</h3>
+          <p>Draw Results</p>
+          <button class="card-refresh-btn" aria-label="Refresh results">
+            <i class="fas fa-sync-alt"></i>
+          </button>
+        </div>
+        
+        <div class="card-content">
+          <div class="draw-date">
+            <div><span class="label">Draw Date:</span> ${formattedDate}</div>
+            <div><span class="label">Time:</span> 9:00 PM (${drawDay})</div>
+          </div>
+          
+          <h4>Winning Numbers</h4>
+          <div class="numbers-container">
+            ${result.winning_numbers.map((number, index) => 
+              `<div class="${numberClass}" style="animation-delay: ${index * 0.1}s">${number}</div>`
+            ).join('')}
+          </div>
+          
+          <div class="stats">
+            <div class="stat-item">
+              <span class="stat-value">${result.total_winners}</span>
+              <span class="stat-label">Total Winners</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">${result.total_prizes}</span>
+              <span class="stat-label">Total Prizes</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">${result.winning_numbers.length}</span>
+              <span class="stat-label">Numbers Drawn</span>
+            </div>
+          </div>
+          
+          <div class="raffle-winners">
+            <h4>Raffle Winners</h4>
+            <button class="view-winners-btn">Click to View</button>
+            <div class="raffle-winners-list" style="display: none;">
+              ${result.raffle_winners.map(winner => 
+                `<div class="raffle-winner-item">
+                  <span>${winner.id}</span>
+                  <span>${winner.prize}</span>
+                </div>`
+              ).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+      
+      // Add event listeners
+      const viewWinnersBtn = card.querySelector('.view-winners-btn');
+      const raffleWinnersList = card.querySelector('.raffle-winners-list');
+      
+      viewWinnersBtn.addEventListener('click', function() {
+        const isVisible = raffleWinnersList.style.display !== 'none';
+        raffleWinnersList.style.display = isVisible ? 'none' : 'block';
+        viewWinnersBtn.textContent = isVisible ? 'Click to View' : 'Hide Winners';
+      });
+      
+      const cardRefreshBtn = card.querySelector('.card-refresh-btn');
+      cardRefreshBtn.addEventListener('click', function() {
+        this.classList.add('rotating');
+        setTimeout(() => {
+          this.classList.remove('rotating');
+          showToast('Results refreshed successfully!');
+          fetchGameResults();
+        }, 1000);
+      });
+      
+      container.appendChild(card);
+    });
+  }
+  
+  // Format date helper
+  function formatDate(dateStr) {
     const parts = dateStr.split('-');
     if (parts.length !== 3) return dateStr;
     
@@ -49,290 +304,46 @@ function formatDate(dateStr) {
     const year = parts[2];
     
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 
-                    'July', 'August', 'September', 'October', 'November', 'December'];
+                  'July', 'August', 'September', 'October', 'November', 'December'];
     
-    // Convert month from string to number and subtract 1 (months are 0-indexed in JS)
     const monthIndex = parseInt(month, 10) - 1;
     const monthName = months[monthIndex];
     
     return `${day} ${monthName} ${year}`;
-}
-
-// Parse winning raffle IDs from the string
-function parseRaffleWinners(raffleString) {
-    if (!raffleString) return [];
+  }
+  
+  // Update timestamp
+  function updateTimeStamp() {
+    const updateTimeElement = document.getElementById('update-time');
+    if (!updateTimeElement) return;
     
-    return raffleString.split('|').map(winner => {
-        const parts = winner.trim().split(' - ');
-        if (parts.length === 2) {
-            return {
-                id: parts[0].trim(),
-                prize: parts[1].trim()
-            };
-        }
-        return { id: winner.trim(), prize: '' };
-    });
-}
-
-// Create a result card for each draw type
-function createResultCard(result, index, gameType) {
-    // Parse winning numbers
-    const winningNumbers = result.winning_numbers.split(',').map(num => num.trim());
-    
-    // Parse raffle winners
-    const raffleWinners = parseRaffleWinners(result.winning_raffleids);
-    
-    // Calculate draw time based on draw type
-    let drawTime = '9:00 PM';
-    let drawDay = 'Sunday';
-    
-    switch(result.draw_type) {
-        case 'Easy6':
-            drawDay = 'Friday';
-            break;
-        case 'Fast5':
-            drawDay = 'Saturday';
-            break;
-        default:
-            drawDay = 'Sunday';
-    }
-    
-    // Create the card element
-    const card = document.createElement('div');
-    card.className = `result-card ${result.draw_type}`;
-    card.setAttribute('data-type', result.draw_type);
-    
-    // Add a slight delay for each card to create a staggered animation effect
-    const delay = index * 0.1;
-    card.style.animationDelay = `${delay}s`;
-    
-    // Display raffle winners directly on game-specific pages
-    const raffleWinnersHTML = `
-        <div class="raffle-winners">
-            <h4>Raffle Winners</h4>
-            <div class="raffle-winners-list">
-                ${raffleWinners.map(winner => `
-                    <div class="raffle-winner-item">
-                        <span class="raffle-winner-id">${winner.id}</span>
-                        <span class="raffle-prize">${winner.prize}</span>
-                    </div>
-                `).join('')}
-            </div>
-        </div>
-    `;
-    
-    card.innerHTML = `
-        <div class="card-header ${result.draw_type}">
-            <h3>${result.draw_type}</h3>
-            <span>Draw Results</span>
-        </div>
-        <div class="card-content">
-            <div class="draw-date">
-                <span><strong>Draw Date:</strong> ${formatDate(result.date)}</span>
-                <span><strong>Time:</strong> ${drawTime} (${drawDay})</span>
-            </div>
-            
-            <h4>Winning Numbers</h4>
-            <div class="numbers-container">
-                ${winningNumbers.map((num, i) => `
-                    <div class="number ${result.draw_type}" style="animation-delay: ${i * 0.1}s">${num}</div>
-                `).join('')}
-            </div>
-            
-            <div class="stats">
-                <div class="stat-item">
-                    <div class="stat-value">${result.total_winners}</div>
-                    <div class="stat-label">Total Winners</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value">${result.total_prizes}</div>
-                    <div class="stat-label">Total Prizes</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value">${winningNumbers.length}</div>
-                    <div class="stat-label">Numbers Drawn</div>
-                </div>
-            </div>
-            
-            ${raffleWinnersHTML}
-        </div>
-    `;
-    
-    return card;
-}
-
-// Update the last updated time
-function updateLastUpdatedTime() {
     const now = new Date();
-    
-    // Format the date and time
     const options = { 
-        day: '2-digit',
-        month: 'long', 
-        year: 'numeric',
-        hour: '2-digit', 
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: true
+      day: '2-digit',
+      month: 'long', 
+      year: 'numeric',
+      hour: '2-digit', 
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true
     };
     
-    const timeString = now.toLocaleString('en-US', options) + ' IST';
+    const timeString = now.toLocaleString('en-US', options);
+    updateTimeElement.textContent = timeString;
+  }
+  
+  // Show toast notification
+  function showToast(message) {
+    const toast = document.getElementById('refresh-toast');
+    if (!toast) return;
     
-    if (updateTimeElement) {
-        updateTimeElement.textContent = timeString;
-    }
-}
-
-// Show toast notification
-function showToast() {
-    if (refreshToast) {
-        refreshToast.classList.add('active');
-        
-        // Hide toast after 2 seconds
-        setTimeout(() => {
-            refreshToast.classList.remove('active');
-        }, 2000);
-    }
-}
-
-// Load results from local storage or fetch from data.json
-function loadResults(gameType, container) {
-    if (!container) return;
+    const toastContent = toast.querySelector('span') || toast.querySelector('.toast-message');
+    if (toastContent) toastContent.textContent = message;
     
-    // Show loading animation
-    container.innerHTML = `
-        <div class="loading-placeholder">
-            <div class="loading-card"></div>
-            <div class="loading-card"></div>
-        </div>
-    `;
+    toast.classList.add('active');
     
-    // Load results from data.json
-    fetch('data.json')
-        .then(response => response.json())
-        .then(data => {
-            if (data && data.results) {
-                const filteredResults = data.results.filter(result => result.draw_type === gameType);
-                
-                if (filteredResults.length > 0) {
-                    // Clear loading placeholders
-                    container.innerHTML = '';
-                    
-                    // Display results
-                    filteredResults.forEach((result, index) => {
-                        const card = createResultCard(result, index, gameType);
-                        container.appendChild(card);
-                    });
-                    
-                    // Save to localStorage
-                    localStorage.setItem(RESULTS_STORAGE_KEY, JSON.stringify(data));
-                    
-                    // Update last updated time
-                    updateLastUpdatedTime();
-                } else {
-                    // No results found for this game type
-                    container.innerHTML = `<p class="no-results">No results found for ${gameType}. Please check back later.</p>`;
-                }
-            }
-        })
-        .catch(error => {
-            console.error('Error loading results:', error);
-            
-            // Try to use cached data if available
-            const cachedData = localStorage.getItem(RESULTS_STORAGE_KEY);
-            if (cachedData) {
-                try {
-                    const data = JSON.parse(cachedData);
-                    if (data && data.results) {
-                        const filteredResults = data.results.filter(result => result.draw_type === gameType);
-                        
-                        if (filteredResults.length > 0) {
-                            // Clear loading placeholders
-                            container.innerHTML = '';
-                            
-                            // Display results
-                            filteredResults.forEach((result, index) => {
-                                const card = createResultCard(result, index, gameType);
-                                container.appendChild(card);
-                            });
-                        } else {
-                            // No results found for this game type
-                            container.innerHTML = `<p class="no-results">No results found for ${gameType}. Please check back later.</p>`;
-                        }
-                    }
-                } catch (e) {
-                    console.error('Error parsing cached data:', e);
-                    container.innerHTML = `<p class="error">Error loading results. Please try again later.</p>`;
-                }
-            } else {
-                container.innerHTML = `<p class="error">Error loading results. Please try again later.</p>`;
-            }
-        });
-}
-
-// Mobile menu toggle
-if (mobileMenuButton) {
-    mobileMenuButton.addEventListener('click', function() {
-        this.classList.toggle('active');
-        mobileMenu.classList.toggle('active');
-    });
-}
-
-// Close mobile menu when clicking a link
-document.querySelectorAll('.menu a').forEach(link => {
-    link.addEventListener('click', function() {
-        if (mobileMenuButton) {
-            mobileMenuButton.classList.remove('active');
-        }
-        if (mobileMenu) {
-            mobileMenu.classList.remove('active');
-        }
-    });
-});
-
-// Close mobile menu when clicking outside
-document.addEventListener('click', function(event) {
-    if (mobileMenu && mobileMenuButton) {
-        if (!event.target.closest('.mobile-menu-button') && 
-            !event.target.closest('.menu') && 
-            mobileMenu.classList.contains('active')) {
-            mobileMenuButton.classList.remove('active');
-            mobileMenu.classList.remove('active');
-        }
-    }
-});
-
-// Handle refresh button click
-if (refreshButton) {
-    refreshButton.addEventListener('click', function() {
-        // Show toast notification
-        showToast();
-        
-        // Reload the appropriate results based on the current page
-        if (window.location.pathname.includes('mega7') && mega7ResultsContainer) {
-            loadResults('Mega7', mega7ResultsContainer);
-        } else if (window.location.pathname.includes('easy6') && easy6ResultsContainer) {
-            loadResults('Easy6', easy6ResultsContainer);
-        } else if (window.location.pathname.includes('fast5') && fast5ResultsContainer) {
-            loadResults('Fast5', fast5ResultsContainer);
-        }
-    });
-}
-
-// Initialize on page load
-window.addEventListener('DOMContentLoaded', function() {
-    // Load theme preference
-    loadThemePreference();
-    
-    // Update the timestamp
-    updateLastUpdatedTime();
-    
-    // Load the appropriate results based on the current page
-    if (window.location.pathname.includes('mega7') && mega7ResultsContainer) {
-        loadResults('Mega7', mega7ResultsContainer);
-    } else if (window.location.pathname.includes('easy6') && easy6ResultsContainer) {
-        loadResults('Easy6', easy6ResultsContainer);
-    } else if (window.location.pathname.includes('fast5') && fast5ResultsContainer) {
-        loadResults('Fast5', fast5ResultsContainer);
-    }
+    setTimeout(() => {
+      toast.classList.remove('active');
+    }, 3000);
+  }
 });

@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
-import { Moon, Sun } from 'lucide-react';
+import { Moon, Sun, RefreshCw } from 'lucide-react';
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -113,7 +113,7 @@ const Header = () => {
         </div>
 
         {/* Mobile Menu */}
-        <div className={`md:hidden transition-all duration-300 overflow-hidden ${mobileMenuOpen ? 'max-h-60 mt-4' : 'max-h-0'}`}>
+        <div className={`md:hidden transition-all duration-300 overflow-hidden ${mobileMenuOpen ? 'max-h-96 mt-4' : 'max-h-0'}`}>
           <ul className="flex flex-col space-y-4 pb-4">
             <li>
               <Link 
@@ -159,6 +159,24 @@ const Header = () => {
               >
                 Blog
               </Link>
+            </li>
+            <li className="pt-2 border-t border-gray-200 dark:border-gray-700">
+              <button
+                onClick={toggleTheme}
+                className="flex items-center space-x-2 text-gray-700 dark:text-gray-200"
+              >
+                {theme === 'dark' ? (
+                  <>
+                    <Sun className="h-5 w-5 text-yellow-500" />
+                    <span>Light Mode</span>
+                  </>
+                ) : (
+                  <>
+                    <Moon className="h-5 w-5 text-gray-700" />
+                    <span>Dark Mode</span>
+                  </>
+                )}
+              </button>
             </li>
           </ul>
         </div>

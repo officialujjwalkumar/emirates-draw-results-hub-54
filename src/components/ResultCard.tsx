@@ -14,6 +14,7 @@ interface ResultCardProps {
   totalWinners: number;
   totalPrizes: string;
   raffleWinners: RaffleWinner[];
+  onRefresh?: () => void;
 }
 
 const ResultCard = ({ 
@@ -22,9 +23,11 @@ const ResultCard = ({
   winningNumbers, 
   totalWinners, 
   totalPrizes, 
-  raffleWinners 
+  raffleWinners,
+  onRefresh
 }: ResultCardProps) => {
   const [showWinners, setShowWinners] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   
   const formatDate = (dateStr: string) => {
     const parts = dateStr.split('-');
@@ -92,10 +95,29 @@ const ResultCard = ({
         return 'bg-blue-600';
     }
   };
+
+  const handleRefresh = () => {
+    if (onRefresh) {
+      setIsRefreshing(true);
+      onRefresh();
+      
+      // Simulate refresh completion after 1 second
+      setTimeout(() => {
+        setIsRefreshing(false);
+      }, 1000);
+    }
+  };
   
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all hover:translate-y-[-5px] hover:shadow-xl border border-gray-200 dark:border-gray-700">
-      <div className={`${getHeaderClass()} px-4 py-3 text-white text-center`}>
+      <div className={`${getHeaderClass()} px-4 py-3 text-white text-center relative`}>
+        <button 
+          onClick={handleRefresh}
+          className="absolute right-2 top-2 p-1.5 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
+          aria-label="Refresh results"
+        >
+          <RefreshCw className={`h-4 w-4 text-white ${isRefreshing ? 'animate-spin' : ''}`} />
+        </button>
         <h3 className="text-xl font-bold">{drawType}</h3>
         <p className="text-sm opacity-90">Draw Results</p>
       </div>

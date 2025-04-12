@@ -54,7 +54,7 @@ const Home = () => {
             date: '12-04-2025',
             winning_numbers: '7,14,22,31,38,46,50',
             total_winners: 143,
-            total_prizes: 'AED 100,000',
+            total_prizes: 'AED 100,000,000',
             winning_raffleids: 'ED-2345678 - AED 10,000|ED-3456789 - AED 5,000'
           },
           {
@@ -279,6 +279,7 @@ const Home = () => {
                     totalWinners={result.total_winners}
                     totalPrizes={result.total_prizes}
                     raffleWinners={parseRaffleWinners(result.winning_raffleids)}
+                    onRefresh={handleRefresh}
                   />
                 ))
               ) : (
@@ -293,9 +294,9 @@ const Home = () => {
       
       <section className="bg-gradient-to-r from-blue-600 to-blue-400 py-16 px-4 text-white text-center">
         <div className="container mx-auto max-w-3xl">
-          <h2 className="text-3xl font-bold mb-4">Ready to Try Your Luck?</h2>
+          <h2 className="text-3xl font-bold mb-4">Check Your Emirates Draw Results</h2>
           <p className="text-lg mb-8 opacity-90">
-            Join millions of participants in the Emirates Draw for a chance to win life-changing prizes!
+            Stay up-to-date with the latest results from Emirates Draw. The website is updated after each draw.
           </p>
           <a
             href="https://emiratesdraw.com"
@@ -303,7 +304,7 @@ const Home = () => {
             rel="noopener noreferrer"
             className="px-6 py-3 bg-white text-blue-600 font-medium rounded-full shadow-lg hover:bg-opacity-90 transition inline-block"
           >
-            Participate Now
+            Official Website
           </a>
         </div>
       </section>

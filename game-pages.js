@@ -18,6 +18,8 @@ const raffleModal = document.getElementById('raffle-modal');
 const closeModal = document.querySelector('.close-modal');
 const modalWinnersList = document.getElementById('modal-winners-list');
 const body = document.body;
+const refreshButton = document.getElementById('refresh-button');
+const refreshToast = document.getElementById('refresh-toast');
 
 // Check for saved theme preference
 function loadThemePreference() {
@@ -108,6 +110,39 @@ function createResultCard(result, index, gameType) {
     const delay = index * 0.1;
     card.style.animationDelay = `${delay}s`;
     
+    // Determine if we're on a game-specific page or the main page
+    const isGamePage = window.location.pathname.includes(result.draw_type.toLowerCase()) || 
+                      (window.location.pathname.includes('mega7') && result.draw_type === 'Mega7') ||
+                      (window.location.pathname.includes('easy6') && result.draw_type === 'Easy6') ||
+                      (window.location.pathname.includes('fast5') && result.draw_type === 'Fast5');
+    
+    let raffleWinnersHTML = '';
+    
+    if (isGamePage) {
+        // On game-specific pages, display raffle winners directly
+        raffleWinnersHTML = `
+            <div class="raffle-winners">
+                <h4>Raffle Winners</h4>
+                <div class="raffle-winners-list">
+                    ${raffleWinners.map(winner => `
+                        <div class="raffle-winner-item">
+                            <span class="raffle-winner-id">${winner.id}</span>
+                            <span class="raffle-prize">${winner.prize}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    } else {
+        // On the main page, use the modal
+        raffleWinnersHTML = `
+            <div class="raffle-winners">
+                <h4>Raffle Winners</h4>
+                <button class="view-winners-btn" data-draw-type="${result.draw_type}" data-draw-date="${result.date}">Click to View</button>
+            </div>
+        `;
+    }
+    
     card.innerHTML = `
         <div class="card-header ${result.draw_type}">
             <h3>${result.draw_type}</h3>
@@ -141,10 +176,7 @@ function createResultCard(result, index, gameType) {
                 </div>
             </div>
             
-            <div class="raffle-winners">
-                <h4>Raffle Winners</h4>
-                <button class="view-winners-btn" data-draw-type="${result.draw_type}" data-draw-date="${result.date}">Click to View</button>
-            </div>
+            ${raffleWinnersHTML}
         </div>
     `;
     
@@ -195,6 +227,18 @@ function updateLastUpdatedTime() {
     
     if (updateTimeElement) {
         updateTimeElement.textContent = istTimeString;
+    }
+}
+
+// Show toast notification
+function showToast() {
+    if (refreshToast) {
+        refreshToast.classList.add('active');
+        
+        // Hide toast after 2 seconds
+        setTimeout(() => {
+            refreshToast.classList.remove('active');
+        }, 2000);
     }
 }
 
@@ -273,10 +317,12 @@ window.addEventListener('click', function(event) {
 });
 
 // Mobile menu toggle
-mobileMenuButton.addEventListener('click', function() {
-    this.classList.toggle('active');
-    mobileMenu.classList.toggle('active');
-});
+if (mobileMenuButton) {
+    mobileMenuButton.addEventListener('click', function() {
+        this.classList.toggle('active');
+        mobileMenu.classList.toggle('active');
+    });
+}
 
 // Close mobile menu when clicking a link
 document.querySelectorAll('.menu a').forEach(link => {
@@ -350,6 +396,20 @@ function useMega7DemoData() {
     
     // Add event listeners to view winners buttons
     setupRaffleButtons();
+}
+
+// Handle refresh button click
+if (refreshButton) {
+    refreshButton.addEventListener('click', function() {
+        // Reload the page data and show toast notification
+        showToast();
+        
+        // For demo purposes, reload after a short delay
+        setTimeout(() => {
+            loadMega7Results();
+            updateLastUpdatedTime();
+        }, 500);
+    });
 }
 
 // Initial setup

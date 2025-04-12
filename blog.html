@@ -5,13 +5,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Blog - Emirates Draw Results Hub</title>
-    <meta name="description" content="Learn more about Emirates Draw, lottery tips, winner stories, and more on our blog." />
-    <meta name="keywords" content="Emirates Draw, lottery blog, winner stories, lottery tips, Mega7, Easy6, Fast5" />
+    <meta name="description" content="Read the latest blog articles about Emirates Draw, lottery tips, winner stories, and more." />
+    <meta name="keywords" content="Emirates Draw blog, lottery tips, winner stories, Emirates Draw guides, UAE lottery" />
     <link rel="icon" href="https://i0.wp.com/emiratesdrawwinners.com/wp-content/uploads/2024/11/cropped-emirates-logo.webp?w=512&ssl=1" type="image/webp">
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
   </head>
 
   <body class="light-mode">
@@ -55,7 +56,6 @@
                 <li><a href="mega7.html">Mega7</a></li>
                 <li><a href="easy6.html">Easy6</a></li>
                 <li><a href="fast5.html">Fast5</a></li>
-                <li><a href="winners.html">Winners</a></li>
                 <li><a href="blog.html" class="active">Blog</a></li>
               </ul>
             </div>
@@ -66,8 +66,9 @@
 
     <main>
       <div class="container">
-        <h2 class="section-title">Latest Blog Posts</h2>
-        <div class="blog-container">
+        <h1 class="section-title">Latest Blog Posts</h1>
+        
+        <div class="blog-grid">
           <div class="blog-card">
             <div class="blog-image">
               <img src="https://i0.wp.com/emiratesdrawwinners.com/wp-content/uploads/2024/11/emirates-results-today.jpg?resize=1024%2C538&ssl=1" alt="How to Choose Lucky Numbers">
@@ -94,25 +95,25 @@
           
           <div class="blog-card">
             <div class="blog-image">
-              <img src="https://i0.wp.com/emiratesdrawwinners.com/wp-content/uploads/2024/11/emirates-results-today.jpg?resize=1024%2C538&ssl=1" alt="Emirates Draw Guide">
+              <img src="https://i0.wp.com/emiratesdrawwinners.com/wp-content/uploads/2024/11/emirates-results-today.jpg?resize=1024%2C538&ssl=1" alt="Understanding Emirates Draw Games">
             </div>
             <div class="blog-content">
               <div class="blog-date">March 28, 2025</div>
-              <h3 class="blog-title">Complete Guide to Emirates Draw: Everything You Need to Know</h3>
-              <p class="blog-excerpt">New to Emirates Draw? This comprehensive guide covers everything from how to play to claiming prizes. Learn about the different games, odds, and strategies.</p>
-              <a href="blog-complete-guide.html" class="read-more">Read More</a>
+              <h3 class="blog-title">Complete Guide to Understanding Emirates Draw Games</h3>
+              <p class="blog-excerpt">A comprehensive breakdown of all Emirates Draw games - Mega7, Easy6, and Fast5. Learn about the rules, prizes, and strategies for each game format.</p>
+              <a href="blog-understanding-games.html" class="read-more">Read More</a>
             </div>
           </div>
           
           <div class="blog-card">
             <div class="blog-image">
-              <img src="https://i0.wp.com/emiratesdrawwinners.com/wp-content/uploads/2024/11/emirates-results-today.jpg?resize=1024%2C538&ssl=1" alt="Conservation Initiatives">
+              <img src="https://i0.wp.com/emiratesdrawwinners.com/wp-content/uploads/2024/11/emirates-results-today.jpg?resize=1024%2C538&ssl=1" alt="History of Emirates Draw">
             </div>
             <div class="blog-content">
-              <div class="blog-date">March 20, 2025</div>
-              <h3 class="blog-title">How Emirates Draw Supports Environmental Conservation</h3>
-              <p class="blog-excerpt">Did you know that Emirates Draw supports environmental conservation initiatives? Learn about the Coral Reef Restoration Program and how your participation helps protect marine ecosystems.</p>
-              <a href="blog-conservation.html" class="read-more">Read More</a>
+              <div class="blog-date">March 15, 2025</div>
+              <h3 class="blog-title">The History and Impact of Emirates Draw</h3>
+              <p class="blog-excerpt">Explore the origins of Emirates Draw, its growth over the years, and the positive impact it has made on environmental conservation and local communities.</p>
+              <a href="blog-history.html" class="read-more">Read More</a>
             </div>
           </div>
         </div>
@@ -140,7 +141,6 @@
             <div class="footer-column">
               <h4>Information</h4>
               <ul>
-                <li><a href="winners.html">Winners</a></li>
                 <li><a href="blog.html">Blog</a></li>
                 <li><a href="contact.html">Contact Us</a></li>
               </ul>
@@ -164,53 +164,6 @@
       </div>
     </footer>
     
-    <script>
-    // Theme toggle functionality
-    const themeToggle = document.getElementById('theme-toggle');
-    const body = document.body;
-    
-    themeToggle.addEventListener('click', function() {
-      body.classList.toggle('dark-mode');
-      body.classList.toggle('light-mode');
-      
-      // Save preference
-      const isDarkMode = body.classList.contains('dark-mode');
-      localStorage.setItem('dark_mode_enabled', isDarkMode);
-    });
-    
-    // Load theme preference on page load
-    function loadThemePreference() {
-      const isDarkMode = localStorage.getItem('dark_mode_enabled') === 'true';
-      if (isDarkMode) {
-        body.classList.remove('light-mode');
-        body.classList.add('dark-mode');
-      } else {
-        body.classList.remove('dark-mode');
-        body.classList.add('light-mode');
-      }
-    }
-    
-    // Mobile menu functionality
-    const mobileMenuButton = document.querySelector('.mobile-menu-button');
-    const mobileMenu = document.querySelector('.menu');
-    
-    mobileMenuButton.addEventListener('click', function() {
-      this.classList.toggle('active');
-      mobileMenu.classList.toggle('active');
-    });
-    
-    // Close mobile menu when clicking a link
-    document.querySelectorAll('.menu a').forEach(link => {
-      link.addEventListener('click', function() {
-        mobileMenuButton.classList.remove('active');
-        mobileMenu.classList.remove('active');
-      });
-    });
-    
-    // Initialize
-    document.addEventListener('DOMContentLoaded', function() {
-      loadThemePreference();
-    });
-    </script>
+    <script src="script.js"></script>
   </body>
 </html>

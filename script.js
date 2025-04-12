@@ -4,8 +4,16 @@ const API_URL = 'https://webapiserver.online/emiratesresults/';
 const RESULTS_STORAGE_KEY = 'emirates_draw_results';
 const DARK_MODE_STORAGE_KEY = 'dark_mode_enabled';
 
+// Game-specific storage keys
+const MEGA7_RESULTS_KEY = 'mega7_results';
+const EASY6_RESULTS_KEY = 'easy6_results';
+const FAST5_RESULTS_KEY = 'fast5_results';
+
 // Elements
 const resultsContainer = document.getElementById('results-container');
+const mega7ResultsContainer = document.getElementById('mega7-results-container');
+const easy6ResultsContainer = document.getElementById('easy6-results-container');
+const fast5ResultsContainer = document.getElementById('fast5-results-container');
 const updateTimeElement = document.getElementById('update-time');
 const refreshMessage = document.getElementById('refresh-message');
 const loadingSpinner = document.getElementById('loading-spinner');
@@ -17,6 +25,7 @@ const raffleModal = document.getElementById('raffle-modal');
 const closeModal = document.querySelector('.close-modal');
 const modalWinnersList = document.getElementById('modal-winners-list');
 const refreshButton = document.getElementById('refresh-button');
+const refreshToast = document.getElementById('refresh-toast');
 const faqItems = document.querySelectorAll('.faq-item');
 const body = document.body;
 
@@ -109,6 +118,39 @@ function createResultCard(result, index) {
     const delay = index * 0.1;
     card.style.animationDelay = `${delay}s`;
     
+    // Determine if we're on a game-specific page or the main page
+    const isGamePage = window.location.pathname.includes(result.draw_type.toLowerCase()) || 
+                       (window.location.pathname.includes('mega7') && result.draw_type === 'Mega7') ||
+                       (window.location.pathname.includes('easy6') && result.draw_type === 'Easy6') ||
+                       (window.location.pathname.includes('fast5') && result.draw_type === 'Fast5');
+    
+    let raffleWinnersHTML = '';
+    
+    if (isGamePage) {
+        // On game-specific pages, display raffle winners directly
+        raffleWinnersHTML = `
+            <div class="raffle-winners">
+                <h4>Raffle Winners</h4>
+                <div class="raffle-winners-list">
+                    ${raffleWinners.map(winner => `
+                        <div class="raffle-winner-item">
+                            <span class="raffle-winner-id">${winner.id}</span>
+                            <span class="raffle-prize">${winner.prize}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    } else {
+        // On the main page, use the modal
+        raffleWinnersHTML = `
+            <div class="raffle-winners">
+                <h4>Raffle Winners</h4>
+                <button class="view-winners-btn" data-draw-type="${result.draw_type}" data-draw-date="${result.date}">Click to View</button>
+            </div>
+        `;
+    }
+    
     card.innerHTML = `
         <div class="card-header ${result.draw_type}">
             <h3>${result.draw_type}</h3>
@@ -142,10 +184,7 @@ function createResultCard(result, index) {
                 </div>
             </div>
             
-            <div class="raffle-winners">
-                <h4>Raffle Winners</h4>
-                <button class="view-winners-btn" data-draw-type="${result.draw_type}" data-draw-date="${result.date}">Click to View</button>
-            </div>
+            ${raffleWinnersHTML}
         </div>
     `;
     
@@ -193,38 +232,75 @@ function updateLastUpdatedTime() {
     };
     
     const istTimeString = now.toLocaleString('en-US', istOptions) + ' IST';
-    updateTimeElement.textContent = istTimeString;
+    
+    if (updateTimeElement) {
+        updateTimeElement.textContent = istTimeString;
+    }
+}
+
+// Show toast notification
+function showToast() {
+    if (refreshToast) {
+        refreshToast.classList.add('active');
+        
+        // Hide toast after 2 seconds
+        setTimeout(() => {
+            refreshToast.classList.remove('active');
+        }, 2000);
+    }
 }
 
 // Show loading state
 function showLoading() {
-    loadingSpinner.style.display = 'block';
-    refreshMessage.textContent = 'Fetching latest results...';
-    refreshButton.classList.add('rotating');
+    if (loadingSpinner) {
+        loadingSpinner.style.display = 'block';
+    }
+    if (refreshMessage) {
+        refreshMessage.textContent = 'Fetching latest results...';
+    }
+    if (refreshButton) {
+        refreshButton.classList.add('rotating');
+    }
 }
 
 // Hide loading state
 function hideLoading() {
-    loadingSpinner.style.display = 'none';
-    refreshMessage.textContent = 'Results updated successfully';
-    refreshButton.classList.remove('rotating');
+    if (loadingSpinner) {
+        loadingSpinner.style.display = 'none';
+    }
+    if (refreshMessage) {
+        refreshMessage.textContent = 'Results updated successfully';
+    }
+    if (refreshButton) {
+        refreshButton.classList.remove('rotating');
+    }
     
     // Clear the message after 3 seconds
     setTimeout(() => {
-        refreshMessage.textContent = '';
+        if (refreshMessage) {
+            refreshMessage.textContent = '';
+        }
     }, 3000);
 }
 
 // Error handling
 function showError(message) {
-    loadingSpinner.style.display = 'none';
-    refreshMessage.textContent = `Error: ${message}. Retrying soon...`;
-    refreshMessage.style.color = 'var(--secondary)';
-    refreshButton.classList.remove('rotating');
+    if (loadingSpinner) {
+        loadingSpinner.style.display = 'none';
+    }
+    if (refreshMessage) {
+        refreshMessage.textContent = `Error: ${message}. Retrying soon...`;
+        refreshMessage.style.color = 'var(--secondary)';
+    }
+    if (refreshButton) {
+        refreshButton.classList.remove('rotating');
+    }
     
     // Reset message style after 3 seconds
     setTimeout(() => {
-        refreshMessage.style.color = '';
+        if (refreshMessage) {
+            refreshMessage.style.color = '';
+        }
     }, 3000);
 }
 
@@ -258,6 +334,22 @@ function saveResultsToStorage(results) {
     };
     
     localStorage.setItem(RESULTS_STORAGE_KEY, JSON.stringify(storageData));
+    
+    // Also save game-specific results
+    saveGameSpecificData(results);
+}
+
+// Save game-specific data to local storage
+function saveGameSpecificData(results) {
+    if (!results) return;
+    
+    const mega7Results = results.filter(result => result.draw_type === 'Mega7');
+    const easy6Results = results.filter(result => result.draw_type === 'Easy6');
+    const fast5Results = results.filter(result => result.draw_type === 'Fast5');
+    
+    localStorage.setItem(MEGA7_RESULTS_KEY, JSON.stringify(mega7Results));
+    localStorage.setItem(EASY6_RESULTS_KEY, JSON.stringify(easy6Results));
+    localStorage.setItem(FAST5_RESULTS_KEY, JSON.stringify(fast5Results));
 }
 
 // Load results from local storage
@@ -267,6 +359,55 @@ function loadResultsFromStorage() {
         return JSON.parse(savedData);
     }
     return null;
+}
+
+// Load game-specific results
+function loadGameResults(gameType) {
+    let gameKey;
+    
+    switch(gameType) {
+        case 'Mega7':
+            gameKey = MEGA7_RESULTS_KEY;
+            break;
+        case 'Easy6':
+            gameKey = EASY6_RESULTS_KEY;
+            break;
+        case 'Fast5':
+            gameKey = FAST5_RESULTS_KEY;
+            break;
+        default:
+            gameKey = RESULTS_STORAGE_KEY;
+    }
+    
+    const savedData = localStorage.getItem(gameKey);
+    if (savedData) {
+        return JSON.parse(savedData);
+    }
+    
+    // If game-specific data doesn't exist, try to filter from all results
+    const allResults = loadResultsFromStorage();
+    if (allResults && allResults.results) {
+        const filteredResults = allResults.results.filter(result => result.draw_type === gameType);
+        return filteredResults;
+    }
+    
+    return [];
+}
+
+// Setup event listeners for raffle winner buttons
+function setupRaffleButtons() {
+    const viewWinnersButtons = document.querySelectorAll('.view-winners-btn');
+    
+    viewWinnersButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const drawType = this.getAttribute('data-draw-type');
+            const drawDate = this.getAttribute('data-draw-date');
+            const card = this.closest('.result-card');
+            const raffleWinnersData = JSON.parse(card.getAttribute('data-raffle-winners'));
+            
+            showRaffleWinners(drawType, drawDate, raffleWinnersData);
+        });
+    });
 }
 
 // Fetch and display results
@@ -344,26 +485,36 @@ async function fetchResults() {
         // Save results to storage
         saveResultsToStorage(data.results);
         
-        // Clear previous results
-        resultsContainer.innerHTML = '';
+        // Clear previous results if on main page
+        if (resultsContainer) {
+            resultsContainer.innerHTML = '';
+            
+            // Create and append result cards
+            data.results.forEach((result, index) => {
+                const card = createResultCard(result, index);
+                resultsContainer.appendChild(card);
+            });
+            
+            // Apply any active filters
+            const activeFilter = document.querySelector('.filter-tab.active');
+            if (activeFilter) {
+                filterResults(activeFilter.getAttribute('data-filter'));
+            }
+        }
         
-        // Create and append result cards
-        data.results.forEach((result, index) => {
-            const card = createResultCard(result, index);
-            resultsContainer.appendChild(card);
-        });
+        // Load game-specific page results
+        loadGamePageResults();
         
         // Update last updated time
         updateLastUpdatedTime();
         
         hideLoading();
         
-        // Apply any active filters
-        const activeFilter = document.querySelector('.filter-tab.active').getAttribute('data-filter');
-        filterResults(activeFilter);
-        
         // Add event listeners to view winners buttons
         setupRaffleButtons();
+        
+        // Show toast notification
+        showToast();
         
     } catch (error) {
         console.error('Error fetching results:', error);
@@ -413,49 +564,98 @@ function useDemoData() {
     // Save demo data to storage
     saveResultsToStorage(demoData.results);
     
-    // Clear previous results
-    resultsContainer.innerHTML = '';
+    // Clear previous results if on main page
+    if (resultsContainer) {
+        resultsContainer.innerHTML = '';
+        
+        // Create and append result cards using demo data
+        demoData.results.forEach((result, index) => {
+            const card = createResultCard(result, index);
+            resultsContainer.appendChild(card);
+        });
+        
+        // Apply any active filters
+        const activeFilter = document.querySelector('.filter-tab.active');
+        if (activeFilter) {
+            filterResults(activeFilter.getAttribute('data-filter'));
+        }
+    }
     
-    // Create and append result cards using demo data
-    demoData.results.forEach((result, index) => {
-        const card = createResultCard(result, index);
-        resultsContainer.appendChild(card);
-    });
+    // Load game-specific page results
+    loadGamePageResults();
     
     // Update last updated time
     updateLastUpdatedTime();
     
     hideLoading();
     
-    // Apply any active filters
-    const activeFilter = document.querySelector('.filter-tab.active').getAttribute('data-filter');
-    filterResults(activeFilter);
-    
     // Add event listeners to view winners buttons
     setupRaffleButtons();
+    
+    // Show toast notification
+    showToast();
 }
 
-// Setup event listeners for raffle winner buttons
-function setupRaffleButtons() {
-    const viewWinnersButtons = document.querySelectorAll('.view-winners-btn');
-    
-    viewWinnersButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const drawType = this.getAttribute('data-draw-type');
-            const drawDate = this.getAttribute('data-draw-date');
-            const card = this.closest('.result-card');
-            const raffleWinnersData = JSON.parse(card.getAttribute('data-raffle-winners'));
+// Load results for game-specific pages
+function loadGamePageResults() {
+    // Check if on Mega7 page
+    if (mega7ResultsContainer) {
+        const mega7Results = loadGameResults('Mega7');
+        
+        if (mega7Results && mega7Results.length > 0) {
+            mega7ResultsContainer.innerHTML = '';
             
-            showRaffleWinners(drawType, drawDate, raffleWinnersData);
-        });
+            mega7Results.forEach((result, index) => {
+                const card = createResultCard(result, index);
+                mega7ResultsContainer.appendChild(card);
+            });
+        } else {
+            mega7ResultsContainer.innerHTML = '<div class="no-results">No results available at this time.</div>';
+        }
+    }
+    
+    // Check if on Easy6 page
+    if (easy6ResultsContainer) {
+        const easy6Results = loadGameResults('Easy6');
+        
+        if (easy6Results && easy6Results.length > 0) {
+            easy6ResultsContainer.innerHTML = '';
+            
+            easy6Results.forEach((result, index) => {
+                const card = createResultCard(result, index);
+                easy6ResultsContainer.appendChild(card);
+            });
+        } else {
+            easy6ResultsContainer.innerHTML = '<div class="no-results">No results available at this time.</div>';
+        }
+    }
+    
+    // Check if on Fast5 page
+    if (fast5ResultsContainer) {
+        const fast5Results = loadGameResults('Fast5');
+        
+        if (fast5Results && fast5Results.length > 0) {
+            fast5ResultsContainer.innerHTML = '';
+            
+            fast5Results.forEach((result, index) => {
+                const card = createResultCard(result, index);
+                fast5ResultsContainer.appendChild(card);
+            });
+        } else {
+            fast5ResultsContainer.innerHTML = '<div class="no-results">No results available at this time.</div>';
+        }
+    }
+}
+
+// Set up event listeners
+
+// Close modal when clicking the close button
+if (closeModal) {
+    closeModal.addEventListener('click', function() {
+        raffleModal.classList.remove('active');
+        document.body.style.overflow = '';
     });
 }
-
-// Close modal
-closeModal.addEventListener('click', function() {
-    raffleModal.classList.remove('active');
-    document.body.style.overflow = '';
-});
 
 // Close modal when clicking outside
 window.addEventListener('click', function(event) {
@@ -466,81 +666,74 @@ window.addEventListener('click', function(event) {
 });
 
 // Set up event listeners for filter tabs
-filterTabs.forEach(tab => {
-    tab.addEventListener('click', function() {
-        // Remove active class from all tabs
-        filterTabs.forEach(t => t.classList.remove('active'));
-        
-        // Add active class to clicked tab
-        this.classList.add('active');
-        
-        // Filter results
-        const drawType = this.getAttribute('data-filter');
-        filterResults(drawType);
+if (filterTabs) {
+    filterTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            // Remove active class from all tabs
+            filterTabs.forEach(t => t.classList.remove('active'));
+            
+            // Add active class to clicked tab
+            this.classList.add('active');
+            
+            // Filter results
+            const drawType = this.getAttribute('data-filter');
+            filterResults(drawType);
+        });
     });
-});
+}
 
 // Mobile menu toggle
-mobileMenuButton.addEventListener('click', function() {
-    this.classList.toggle('active');
-    mobileMenu.classList.toggle('active');
-});
-
-// Close mobile menu when clicking a link
-document.querySelectorAll('.menu a').forEach(link => {
-    link.addEventListener('click', function() {
-        mobileMenuButton.classList.remove('active');
-        mobileMenu.classList.remove('active');
+if (mobileMenuButton) {
+    mobileMenuButton.addEventListener('click', function() {
+        this.classList.toggle('active');
+        mobileMenu.classList.toggle('active');
     });
-});
-
-// Close mobile menu when clicking outside
-document.addEventListener('click', function(event) {
-    if (!event.target.closest('.mobile-menu-button') && 
-        !event.target.closest('.menu') && 
-        mobileMenu.classList.contains('active')) {
-        mobileMenuButton.classList.remove('active');
-        mobileMenu.classList.remove('active');
-    }
-});
-
-// Handle refresh button click
-refreshButton.addEventListener('click', function() {
-    fetchResults();
-});
-
-// FAQ functionality
-faqItems.forEach(item => {
-    const question = item.querySelector('.faq-question');
     
-    question.addEventListener('click', () => {
-        const isActive = item.classList.contains('active');
-        
-        // Close all other FAQs
-        faqItems.forEach(faq => {
-            faq.classList.remove('active');
+    // Close mobile menu when clicking a link
+    document.querySelectorAll('.menu a').forEach(link => {
+        link.addEventListener('click', function() {
+            mobileMenuButton.classList.remove('active');
+            mobileMenu.classList.remove('active');
         });
-        
-        // Toggle current FAQ
-        if (!isActive) {
-            item.classList.add('active');
+    });
+    
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!event.target.closest('.mobile-menu-button') && 
+            !event.target.closest('.menu') && 
+            mobileMenu.classList.contains('active')) {
+            mobileMenuButton.classList.remove('active');
+            mobileMenu.classList.remove('active');
         }
     });
-});
+}
 
-// Create game-specific pages with historical data
-function saveGameSpecificData() {
-    const savedData = loadResultsFromStorage();
-    
-    if (savedData && savedData.results) {
-        const mega7Results = savedData.results.filter(result => result.draw_type === 'Mega7');
-        const easy6Results = savedData.results.filter(result => result.draw_type === 'Easy6');
-        const fast5Results = savedData.results.filter(result => result.draw_type === 'Fast5');
+// Handle refresh button click
+if (refreshButton) {
+    refreshButton.addEventListener('click', function() {
+        fetchResults();
+    });
+}
+
+// FAQ functionality
+if (faqItems) {
+    faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
         
-        localStorage.setItem('mega7_results', JSON.stringify(mega7Results));
-        localStorage.setItem('easy6_results', JSON.stringify(easy6Results));
-        localStorage.setItem('fast5_results', JSON.stringify(fast5Results));
-    }
+        question.addEventListener('click', () => {
+            const isActive = item.classList.contains('active');
+            
+            // Close all other FAQs
+            faqItems.forEach(faq => {
+                faq.classList.remove('active');
+            });
+            
+            // Toggle current FAQ
+            if (!isActive) {
+                item.classList.add('active');
+            }
+        });
+    });
 }
 
 // Initial setup
@@ -552,20 +745,27 @@ function initialSetup() {
     const cachedData = loadResultsFromStorage();
     
     if (cachedData) {
-        // Display cached results
-        resultsContainer.innerHTML = '';
+        // Display cached results if on main page
+        if (resultsContainer) {
+            resultsContainer.innerHTML = '';
+            
+            cachedData.results.forEach((result, index) => {
+                const card = createResultCard(result, index);
+                resultsContainer.appendChild(card);
+            });
+            
+            // Apply any active filters
+            const activeFilter = document.querySelector('.filter-tab.active');
+            if (activeFilter) {
+                filterResults(activeFilter.getAttribute('data-filter'));
+            }
+        }
         
-        cachedData.results.forEach((result, index) => {
-            const card = createResultCard(result, index);
-            resultsContainer.appendChild(card);
-        });
+        // Load game-specific page results
+        loadGamePageResults();
         
         // Add event listeners to view winners buttons
         setupRaffleButtons();
-        
-        // Apply any active filters
-        const activeFilter = document.querySelector('.filter-tab.active').getAttribute('data-filter');
-        filterResults(activeFilter);
         
         // Update the timestamp
         updateLastUpdatedTime();
@@ -573,9 +773,6 @@ function initialSetup() {
         // No cached data, fetch new
         fetchResults();
     }
-    
-    // Save game-specific data
-    saveGameSpecificData();
 }
 
 // Initialize on page load

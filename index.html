@@ -5,12 +5,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Emirates Draw Results Hub</title>
-    <meta name="description" content="Latest Emirates Draw Results - Mega7, Easy6, Fast5" />
+    <meta name="description" content="Latest Emirates Draw Results - Mega7, Easy6, Fast5. Win big prizes with Emirates Draw!" />
+    <meta name="keywords" content="Emirates Draw, lottery results, Mega7, Easy6, Fast5, UAE lottery, raffle winners" />
     <link rel="icon" href="https://i0.wp.com/emiratesdrawwinners.com/wp-content/uploads/2024/11/cropped-emirates-logo.webp?w=512&ssl=1" type="image/webp">
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Audiowide&display=swap" rel="stylesheet">
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
   </head>
@@ -23,6 +24,22 @@
             <img src="https://i0.wp.com/emiratesdrawwinners.com/wp-content/uploads/2024/11/cropped-emirates-logo.webp?w=512&ssl=1" alt="Emirates Draw Logo">
             <h1>Emirates Draw Results</h1>
           </div>
+          
+          <div class="mobile-menu-button">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          
+          <ul class="menu">
+            <li><a href="#" class="active">Latest Results</a></li>
+            <li><a href="#">Mega7</a></li>
+            <li><a href="#">Easy6</a></li>
+            <li><a href="#">Fast5</a></li>
+            <li><a href="#">How To Play</a></li>
+            <li><a href="#">Winners</a></li>
+          </ul>
+          
           <div class="last-updated">
             <span>Last Updated: </span>
             <span id="update-time">Fetching...</span>
@@ -33,8 +50,13 @@
 
     <main>
       <div class="container">
-        <div class="hero">
-          <img src="https://i0.wp.com/emiratesdrawwinners.com/wp-content/uploads/2024/11/emirates-results-today.jpg?resize=1024%2C538&ssl=1" alt="Emirates Draw Results Banner">
+        <div class="jackpot-banner">
+          <div class="jackpot-content">
+            <h2>Next Draw Jackpot</h2>
+            <div class="prize-amount">AED 100,000,000</div>
+            <p class="countdown">Draw Date: April 21st, 2025</p>
+            <a href="#" class="play-button">Play Now</a>
+          </div>
         </div>
         
         <div class="refresh-status">
@@ -43,7 +65,13 @@
         </div>
         
         <div class="results-wrapper">
-          <h2>Latest Draw Results</h2>
+          <h2 class="section-title">Latest Draw Results</h2>
+          <div class="filter-tabs">
+            <button class="filter-tab active" data-filter="all">All Results</button>
+            <button class="filter-tab" data-filter="Mega7">Mega7</button>
+            <button class="filter-tab" data-filter="Easy6">Easy6</button>
+            <button class="filter-tab" data-filter="Fast5">Fast5</button>
+          </div>
           <div id="results-container" class="results-container">
             <!-- Results will be populated here by JavaScript -->
             <div class="loading-placeholder">
@@ -53,13 +81,89 @@
             </div>
           </div>
         </div>
+        
+        <div class="game-info">
+          <div class="game-info-card mega7-info">
+            <div class="info-header">
+              <h3>Mega7</h3>
+            </div>
+            <div class="info-content">
+              <p>7 numbers from 1-35</p>
+              <p>Match 7 numbers to win AED 100,000,000</p>
+              <p>Draw held every Sunday at 9 PM</p>
+              <a href="#" class="info-button">Learn More</a>
+            </div>
+          </div>
+          
+          <div class="game-info-card easy6-info">
+            <div class="info-header">
+              <h3>Easy6</h3>
+            </div>
+            <div class="info-content">
+              <p>6 numbers from 1-42</p>
+              <p>Match 6 numbers to win AED 15,000,000</p>
+              <p>Draw held every Friday at 9 PM</p>
+              <a href="#" class="info-button">Learn More</a>
+            </div>
+          </div>
+          
+          <div class="game-info-card fast5-info">
+            <div class="info-header">
+              <h3>Fast5</h3>
+            </div>
+            <div class="info-content">
+              <p>5 numbers from 1-35</p>
+              <p>Match 5 numbers to win AED 25,000</p>
+              <p>Draw held every Saturday at 9 PM</p>
+              <a href="#" class="info-button">Learn More</a>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
 
     <footer>
       <div class="container">
-        <p>&copy; 2025 Emirates Draw Results Hub. All Rights Reserved.</p>
-        <p>Data refreshes automatically. This is not an official Emirates Draw website.</p>
+        <div class="footer-content">
+          <div class="footer-logo">
+            <img src="https://i0.wp.com/emiratesdrawwinners.com/wp-content/uploads/2024/11/cropped-emirates-logo.webp?w=512&ssl=1" alt="Emirates Draw Logo">
+            <h3>Emirates Draw</h3>
+          </div>
+          
+          <div class="footer-links">
+            <div class="footer-column">
+              <h4>Games</h4>
+              <ul>
+                <li><a href="#">Mega7</a></li>
+                <li><a href="#">Easy6</a></li>
+                <li><a href="#">Fast5</a></li>
+              </ul>
+            </div>
+            
+            <div class="footer-column">
+              <h4>Information</h4>
+              <ul>
+                <li><a href="#">How to Play</a></li>
+                <li><a href="#">Past Results</a></li>
+                <li><a href="#">Winners</a></li>
+              </ul>
+            </div>
+            
+            <div class="footer-column">
+              <h4>Support</h4>
+              <ul>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">FAQ</a></li>
+                <li><a href="#">Terms & Conditions</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <div class="copyright">
+          <p>&copy; 2025 Emirates Draw Results Hub. All Rights Reserved.</p>
+          <p>Data refreshes automatically. This is not an official Emirates Draw website.</p>
+        </div>
       </div>
     </footer>
     

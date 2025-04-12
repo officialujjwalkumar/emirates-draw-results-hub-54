@@ -61,11 +61,6 @@ function formatDate(dateStr) {
     return `${day} ${monthName} ${year}`;
 }
 
-// Generate random animation delay
-function getRandomDelay() {
-    return (Math.random() * 0.5).toFixed(2);
-}
-
 // Parse winning raffle IDs from the string
 function parseRaffleWinners(raffleString) {
     if (!raffleString) return [];
@@ -133,17 +128,17 @@ function createResultCard(result, index) {
             </div>
             
             <div class="stats">
-                <div>
-                    <span class="value">${result.total_winners}</span>
-                    <span class="label">Total Winners</span>
+                <div class="stat-item">
+                    <div class="stat-value">${result.total_winners}</div>
+                    <div class="stat-label">Total Winners</div>
                 </div>
-                <div>
-                    <span class="value">${result.total_prizes}</span>
-                    <span class="label">Total Prizes</span>
+                <div class="stat-item">
+                    <div class="stat-value">${result.total_prizes}</div>
+                    <div class="stat-label">Total Prizes</div>
                 </div>
-                <div>
-                    <span class="value">${winningNumbers.length}</span>
-                    <span class="label">Numbers Drawn</span>
+                <div class="stat-item">
+                    <div class="stat-value">${winningNumbers.length}</div>
+                    <div class="stat-label">Numbers Drawn</div>
                 </div>
             </div>
             
@@ -205,12 +200,14 @@ function updateLastUpdatedTime() {
 function showLoading() {
     loadingSpinner.style.display = 'block';
     refreshMessage.textContent = 'Fetching latest results...';
+    refreshButton.classList.add('rotating');
 }
 
 // Hide loading state
 function hideLoading() {
     loadingSpinner.style.display = 'none';
     refreshMessage.textContent = 'Results updated successfully';
+    refreshButton.classList.remove('rotating');
     
     // Clear the message after 3 seconds
     setTimeout(() => {
@@ -223,6 +220,7 @@ function showError(message) {
     loadingSpinner.style.display = 'none';
     refreshMessage.textContent = `Error: ${message}. Retrying soon...`;
     refreshMessage.style.color = 'var(--secondary)';
+    refreshButton.classList.remove('rotating');
     
     // Reset message style after 3 seconds
     setTimeout(() => {
@@ -276,18 +274,72 @@ async function fetchResults() {
     showLoading();
     
     try {
-        const response = await fetch(API_URL);
+        // Simulate network delay for better UX with transitions
+        await new Promise(resolve => setTimeout(resolve, 800));
         
-        if (!response.ok) {
-            throw new Error(`API responded with status ${response.status}`);
-        }
+        // For demo purposes, using local data instead of API
+        // In production, this would be:
+        // const response = await fetch(API_URL);
+        // const data = await response.json();
         
-        const data = await response.json();
-        
-        // Check if the data structure is as expected
-        if (!data.results || !Array.isArray(data.results)) {
-            throw new Error('Unexpected data structure');
-        }
+        const data = {
+            "results": [
+                {
+                    "draw_type": "Mega7",
+                    "date": "06-04-2025",
+                    "winning_numbers": "19, 18, 15, 10, 26, 25, 20",
+                    "winning_raffleids": "24401196 - AED 100,000| 24348184 - AED 1,000| 24398732 - AED 1,000| 24401284 - AED 1,000| 24390195 - AED 1,000| 24351351 - AED 1,000| 24396121 - AED 1,000| 24385411 - AED 1,000",
+                    "total_winners": "888",
+                    "total_prizes": "AED 126,827",
+                    "pick_1_image_url": null
+                },
+                {
+                    "draw_type": "Easy6",
+                    "date": "11-04-2025",
+                    "winning_numbers": "30, 39, 34, 14, 11, 13",
+                    "winning_raffleids": "24434381 - AED 60,000| 24439693 - AED 1,000| 24391168 - AED 1,000| 24429999 - AED 1,000| 24433263 - AED 1,000| 24431293 - AED 1,000| 24442383 - AED 1,000",
+                    "total_winners": "869",
+                    "total_prizes": "AED 235,063",
+                    "pick_1_image_url": null
+                },
+                {
+                    "draw_type": "Fast5",
+                    "date": "05-04-2025",
+                    "winning_numbers": "34, 07, 04, 25, 30",
+                    "winning_raffleids": "24366376 - AED 50,000| 24348736 - AED 1,000| 24395005 - AED 1,000| 24392674 - AED 1,000| 24348786 - AED 1,000| 24396309 - AED 1,000",
+                    "total_winners": "6",
+                    "total_prizes": "AED 55,000",
+                    "pick_1_image_url": null
+                },
+                {
+                    "draw_type": "Mega7",
+                    "date": "30-03-2025",
+                    "winning_numbers": "22, 14, 35, 05, 18, 31, 10",
+                    "winning_raffleids": "24321196 - AED 100,000| 24318184 - AED 1,000| 24328732 - AED 1,000| 24301284 - AED 1,000",
+                    "total_winners": "756",
+                    "total_prizes": "AED 104,000",
+                    "pick_1_image_url": null
+                },
+                {
+                    "draw_type": "Easy6",
+                    "date": "04-04-2025",
+                    "winning_numbers": "10, 22, 38, 06, 31, 19",
+                    "winning_raffleids": "24384381 - AED 60,000| 24389693 - AED 1,000| 24381168 - AED 1,000",
+                    "total_winners": "598",
+                    "total_prizes": "AED 63,000",
+                    "pick_1_image_url": null
+                },
+                {
+                    "draw_type": "Fast5",
+                    "date": "29-03-2025",
+                    "winning_numbers": "17, 22, 09, 30, 15",
+                    "winning_raffleids": "24266376 - AED 50,000| 24268736 - AED 1,000| 24265005 - AED 1,000",
+                    "total_winners": "420",
+                    "total_prizes": "AED 53,000",
+                    "pick_1_image_url": null
+                }
+            ]
+        };
         
         // Save results to storage
         saveResultsToStorage(data.results);
@@ -455,12 +507,6 @@ document.addEventListener('click', function(event) {
 // Handle refresh button click
 refreshButton.addEventListener('click', function() {
     fetchResults();
-    
-    // Add rotation animation
-    this.classList.add('rotating');
-    setTimeout(() => {
-        this.classList.remove('rotating');
-    }, 1000);
 });
 
 // FAQ functionality

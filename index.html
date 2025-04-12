@@ -11,38 +11,113 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Audiowide&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Audiowide&family=Racing+Sans+One&display=swap" rel="stylesheet">
+    <!-- Schema Markup -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Emirates Draw Results Hub",
+        "url": "https://emiratesdrawwinners.com/",
+        "description": "Get the latest Emirates Draw results for Mega7, Easy6, and Fast5 games.",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://emiratesdrawwinners.com/search?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is Emirates Draw?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Emirates Draw is the UAE's leading gaming operator that offers participants the opportunity to win incredible prizes while supporting environmental conservation initiatives."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How often are Emirates Draw results announced?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Emirates Draw results are announced weekly: MEGA7 on Sundays, EASY6 on Fridays, and FAST5 on Saturdays."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How much can I win in Emirates Draw?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "You can win up to AED 100,000,000 in the MEGA7 Grand Prize, AED 15,000,000 in EASY6, and AED 25,000 in FAST5."
+            }
+          }
+        ]
+      }
+    </script>
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
   </head>
 
-  <body>
+  <body class="light-mode">
+    <div class="theme-toggle-container">
+      <button id="theme-toggle" aria-label="Toggle dark/light mode">
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+    </div>
+    
+    <div class="floating-refresh-button" id="refresh-button" aria-label="Refresh data">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M23 4v6h-6"></path>
+        <path d="M1 20v-6h6"></path>
+        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+      </svg>
+    </div>
+    
     <header>
       <div class="container">
         <nav>
           <div class="logo">
             <img src="https://i0.wp.com/emiratesdrawwinners.com/wp-content/uploads/2024/11/cropped-emirates-logo.webp?w=512&ssl=1" alt="Emirates Draw Logo">
-            <h1>Emirates Draw Results</h1>
+            <h1>Emirates Draw</h1>
           </div>
           
-          <div class="mobile-menu-button">
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-          
-          <ul class="menu">
-            <li><a href="#" class="active">Latest Results</a></li>
-            <li><a href="#">Mega7</a></li>
-            <li><a href="#">Easy6</a></li>
-            <li><a href="#">Fast5</a></li>
-            <li><a href="#">How To Play</a></li>
-            <li><a href="#">Winners</a></li>
-          </ul>
-          
-          <div class="last-updated">
-            <span>Last Updated: </span>
-            <span id="update-time">Fetching...</span>
+          <div class="nav-right">
+            <div class="menu-container">
+              <div class="mobile-menu-button">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              
+              <ul class="menu">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="mega7.html">Mega7</a></li>
+                <li><a href="easy6.html">Easy6</a></li>
+                <li><a href="fast5.html">Fast5</a></li>
+                <li><a href="how-to-play.html">How To Play</a></li>
+                <li><a href="winners.html">Winners</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+              </ul>
+            </div>
           </div>
         </nav>
       </div>
@@ -59,13 +134,18 @@
           </div>
         </div>
         
+        <h2 class="section-title">Latest Draw Results</h2>
+        <div class="last-updated">
+          <span>Last Updated: </span>
+          <span id="update-time">Fetching...</span>
+        </div>
+        
         <div class="refresh-status">
           <div class="spinner" id="loading-spinner"></div>
           <p id="refresh-message">Fetching latest results...</p>
         </div>
         
         <div class="results-wrapper">
-          <h2 class="section-title">Latest Draw Results</h2>
           <div class="filter-tabs">
             <button class="filter-tab active" data-filter="all">All Results</button>
             <button class="filter-tab" data-filter="Mega7">Mega7</button>
@@ -91,7 +171,7 @@
               <p>7 numbers from 1-35</p>
               <p>Match 7 numbers to win AED 100,000,000</p>
               <p>Draw held every Sunday at 9 PM</p>
-              <a href="#" class="info-button">Learn More</a>
+              <a href="mega7.html" class="info-button">Learn More</a>
             </div>
           </div>
           
@@ -103,7 +183,7 @@
               <p>6 numbers from 1-42</p>
               <p>Match 6 numbers to win AED 15,000,000</p>
               <p>Draw held every Friday at 9 PM</p>
-              <a href="#" class="info-button">Learn More</a>
+              <a href="easy6.html" class="info-button">Learn More</a>
             </div>
           </div>
           
@@ -115,7 +195,52 @@
               <p>5 numbers from 1-35</p>
               <p>Match 5 numbers to win AED 25,000</p>
               <p>Draw held every Saturday at 9 PM</p>
-              <a href="#" class="info-button">Learn More</a>
+              <a href="fast5.html" class="info-button">Learn More</a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="faq-section">
+          <h2 class="section-title">Frequently Asked Questions</h2>
+          <div class="faq-container">
+            <div class="faq-item">
+              <div class="faq-question">
+                <h3>What is Emirates Draw?</h3>
+                <div class="faq-icon">+</div>
+              </div>
+              <div class="faq-answer">
+                <p>Emirates Draw is the UAE's leading gaming operator that offers participants the opportunity to win incredible prizes while supporting environmental conservation initiatives.</p>
+              </div>
+            </div>
+            
+            <div class="faq-item">
+              <div class="faq-question">
+                <h3>How often are Emirates Draw results announced?</h3>
+                <div class="faq-icon">+</div>
+              </div>
+              <div class="faq-answer">
+                <p>Emirates Draw results are announced weekly: MEGA7 on Sundays, EASY6 on Fridays, and FAST5 on Saturdays.</p>
+              </div>
+            </div>
+            
+            <div class="faq-item">
+              <div class="faq-question">
+                <h3>How much can I win in Emirates Draw?</h3>
+                <div class="faq-icon">+</div>
+              </div>
+              <div class="faq-answer">
+                <p>You can win up to AED 100,000,000 in the MEGA7 Grand Prize, AED 15,000,000 in EASY6, and AED 25,000 in FAST5.</p>
+              </div>
+            </div>
+            
+            <div class="faq-item">
+              <div class="faq-question">
+                <h3>How do I play Emirates Draw?</h3>
+                <div class="faq-icon">+</div>
+              </div>
+              <div class="faq-answer">
+                <p>You can play Emirates Draw by purchasing a ticket online through the official Emirates Draw website or app, or through authorized retailers in the UAE.</p>
+              </div>
             </div>
           </div>
         </div>
@@ -134,27 +259,27 @@
             <div class="footer-column">
               <h4>Games</h4>
               <ul>
-                <li><a href="#">Mega7</a></li>
-                <li><a href="#">Easy6</a></li>
-                <li><a href="#">Fast5</a></li>
+                <li><a href="mega7.html">Mega7</a></li>
+                <li><a href="easy6.html">Easy6</a></li>
+                <li><a href="fast5.html">Fast5</a></li>
               </ul>
             </div>
             
             <div class="footer-column">
               <h4>Information</h4>
               <ul>
-                <li><a href="#">How to Play</a></li>
-                <li><a href="#">Past Results</a></li>
-                <li><a href="#">Winners</a></li>
+                <li><a href="how-to-play.html">How to Play</a></li>
+                <li><a href="winners.html">Winners</a></li>
+                <li><a href="blog.html">Blog</a></li>
               </ul>
             </div>
             
             <div class="footer-column">
               <h4>Support</h4>
               <ul>
-                <li><a href="#">Contact Us</a></li>
-                <li><a href="#">FAQ</a></li>
-                <li><a href="#">Terms & Conditions</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="terms.html">Terms & Conditions</a></li>
               </ul>
             </div>
           </div>
@@ -166,6 +291,17 @@
         </div>
       </div>
     </footer>
+    
+    <!-- Modal for Raffle Winners -->
+    <div id="raffle-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h3>Raffle Winners</h3>
+        <div id="modal-winners-list" class="modal-winners-list">
+          <!-- Raffle winners will be shown here -->
+        </div>
+      </div>
+    </div>
     
     <script src="script.js"></script>
   </body>

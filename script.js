@@ -1,6 +1,8 @@
 
 // API endpoint for Emirates Draw results
 const API_URL = 'https://webapiserver.online/emiratesresults/';
+const RESULTS_STORAGE_KEY = 'emirates_draw_results';
+const DARK_MODE_STORAGE_KEY = 'dark_mode_enabled';
 
 // Elements
 const resultsContainer = document.getElementById('results-container');
@@ -10,6 +12,35 @@ const loadingSpinner = document.getElementById('loading-spinner');
 const filterTabs = document.querySelectorAll('.filter-tab');
 const mobileMenuButton = document.querySelector('.mobile-menu-button');
 const mobileMenu = document.querySelector('.menu');
+const themeToggle = document.getElementById('theme-toggle');
+const raffleModal = document.getElementById('raffle-modal');
+const closeModal = document.querySelector('.close-modal');
+const modalWinnersList = document.getElementById('modal-winners-list');
+const refreshButton = document.getElementById('refresh-button');
+const faqItems = document.querySelectorAll('.faq-item');
+const body = document.body;
+
+// Check for saved theme preference
+function loadThemePreference() {
+  const isDarkMode = localStorage.getItem(DARK_MODE_STORAGE_KEY) === 'true';
+  if (isDarkMode) {
+    body.classList.remove('light-mode');
+    body.classList.add('dark-mode');
+  } else {
+    body.classList.remove('dark-mode');
+    body.classList.add('light-mode');
+  }
+}
+
+// Toggle theme
+themeToggle.addEventListener('click', function() {
+  body.classList.toggle('dark-mode');
+  body.classList.toggle('light-mode');
+  
+  // Save preference
+  const isDarkMode = body.classList.contains('dark-mode');
+  localStorage.setItem(DARK_MODE_STORAGE_KEY, isDarkMode);
+});
 
 // Format date to display in a more readable format
 function formatDate(dateStr) {
@@ -30,6 +61,11 @@ function formatDate(dateStr) {
     return `${day} ${monthName} ${year}`;
 }
 
+// Generate random animation delay
+function getRandomDelay() {
+    return (Math.random() * 0.5).toFixed(2);
+}
+
 // Parse winning raffle IDs from the string
 function parseRaffleWinners(raffleString) {
     if (!raffleString) return [];
@@ -47,7 +83,7 @@ function parseRaffleWinners(raffleString) {
 }
 
 // Create a result card for each draw type
-function createResultCard(result) {
+function createResultCard(result, index) {
     // Parse winning numbers
     const winningNumbers = result.winning_numbers.split(',').map(num => num.trim());
     
@@ -75,8 +111,8 @@ function createResultCard(result) {
     card.setAttribute('data-type', result.draw_type);
     
     // Add a slight delay for each card to create a staggered animation effect
-    const index = Array.from(resultsContainer.children).length;
-    card.style.animationDelay = `${index * 0.1}s`;
+    const delay = index * 0.1;
+    card.style.animationDelay = `${delay}s`;
     
     card.innerHTML = `
         <div class="card-header ${result.draw_type}">
@@ -91,8 +127,8 @@ function createResultCard(result) {
             
             <h4>Winning Numbers</h4>
             <div class="numbers-container">
-                ${winningNumbers.map(num => `
-                    <div class="number ${result.draw_type}">${num}</div>
+                ${winningNumbers.map((num, i) => `
+                    <div class="number ${result.draw_type}" style="animation-delay: ${i * 0.1}s">${num}</div>
                 `).join('')}
             </div>
             
@@ -113,33 +149,56 @@ function createResultCard(result) {
             
             <div class="raffle-winners">
                 <h4>Raffle Winners</h4>
-                <div class="winners-list">
-                    ${raffleWinners.map(winner => `
-                        <div class="winner-item">
-                            <span class="winner-id">${winner.id}</span>
-                            <span class="prize-amount">${winner.prize}</span>
-                        </div>
-                    `).join('')}
-                </div>
+                <button class="view-winners-btn" data-draw-type="${result.draw_type}" data-draw-date="${result.date}">Click to View</button>
             </div>
         </div>
     `;
     
+    // Store raffle winners data as a custom attribute
+    card.setAttribute('data-raffle-winners', JSON.stringify(raffleWinners));
+    
     return card;
 }
 
-// Update the last updated time
+// Show raffle winners in modal
+function showRaffleWinners(drawType, drawDate, raffleWinners) {
+    // Clear existing content
+    modalWinnersList.innerHTML = '';
+    
+    // Create winner elements
+    raffleWinners.forEach(winner => {
+        const winnerItem = document.createElement('div');
+        winnerItem.className = 'modal-winner-item';
+        winnerItem.innerHTML = `
+            <span class="modal-winner-id">${winner.id}</span>
+            <span class="modal-prize-amount">${winner.prize}</span>
+        `;
+        modalWinnersList.appendChild(winnerItem);
+    });
+    
+    // Show modal
+    raffleModal.classList.add('active');
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+}
+
+// Update the last updated time in IST format
 function updateLastUpdatedTime() {
     const now = new Date();
-    const options = { 
+    
+    // Convert to IST (UTC+5:30)
+    const istOptions = { 
+        timeZone: 'Asia/Kolkata',
         day: '2-digit',
         month: 'long', 
         year: 'numeric',
         hour: '2-digit', 
         minute: '2-digit',
-        second: '2-digit'
+        second: '2-digit',
+        hour12: true
     };
-    updateTimeElement.textContent = now.toLocaleString('en-US', options);
+    
+    const istTimeString = now.toLocaleString('en-US', istOptions) + ' IST';
+    updateTimeElement.textContent = istTimeString;
 }
 
 // Show loading state
@@ -171,18 +230,6 @@ function showError(message) {
     }, 3000);
 }
 
-// Compare results to check if they've changed
-let previousResults = null;
-function resultsHaveChanged(newResults) {
-    if (!previousResults) return true;
-    
-    try {
-        return JSON.stringify(newResults) !== JSON.stringify(previousResults);
-    } catch (e) {
-        return true; // In case of error, assume they've changed
-    }
-}
-
 // Filter results based on draw type
 function filterResults(drawType) {
     const cards = document.querySelectorAll('.result-card');
@@ -205,6 +252,25 @@ function filterResults(drawType) {
     });
 }
 
+// Save results to local storage
+function saveResultsToStorage(results) {
+    const storageData = {
+        timestamp: new Date().toISOString(),
+        results: results
+    };
+    
+    localStorage.setItem(RESULTS_STORAGE_KEY, JSON.stringify(storageData));
+}
+
+// Load results from local storage
+function loadResultsFromStorage() {
+    const savedData = localStorage.getItem(RESULTS_STORAGE_KEY);
+    if (savedData) {
+        return JSON.parse(savedData);
+    }
+    return null;
+}
+
 // Fetch and display results
 async function fetchResults() {
     showLoading();
@@ -223,18 +289,17 @@ async function fetchResults() {
             throw new Error('Unexpected data structure');
         }
         
-        // Since we're not auto-refreshing, let's display the results directly
+        // Save results to storage
+        saveResultsToStorage(data.results);
+        
         // Clear previous results
         resultsContainer.innerHTML = '';
         
         // Create and append result cards
-        data.results.forEach(result => {
-            const card = createResultCard(result);
+        data.results.forEach((result, index) => {
+            const card = createResultCard(result, index);
             resultsContainer.appendChild(card);
         });
-        
-        // Store the results for later comparison if needed
-        previousResults = [...data.results];
         
         // Update last updated time
         updateLastUpdatedTime();
@@ -244,6 +309,9 @@ async function fetchResults() {
         // Apply any active filters
         const activeFilter = document.querySelector('.filter-tab.active').getAttribute('data-filter');
         filterResults(activeFilter);
+        
+        // Add event listeners to view winners buttons
+        setupRaffleButtons();
         
     } catch (error) {
         console.error('Error fetching results:', error);
@@ -290,12 +358,15 @@ function useDemoData() {
         ]
     };
     
+    // Save demo data to storage
+    saveResultsToStorage(demoData.results);
+    
     // Clear previous results
     resultsContainer.innerHTML = '';
     
     // Create and append result cards using demo data
-    demoData.results.forEach(result => {
-        const card = createResultCard(result);
+    demoData.results.forEach((result, index) => {
+        const card = createResultCard(result, index);
         resultsContainer.appendChild(card);
     });
     
@@ -307,7 +378,40 @@ function useDemoData() {
     // Apply any active filters
     const activeFilter = document.querySelector('.filter-tab.active').getAttribute('data-filter');
     filterResults(activeFilter);
+    
+    // Add event listeners to view winners buttons
+    setupRaffleButtons();
 }
+
+// Setup event listeners for raffle winner buttons
+function setupRaffleButtons() {
+    const viewWinnersButtons = document.querySelectorAll('.view-winners-btn');
+    
+    viewWinnersButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const drawType = this.getAttribute('data-draw-type');
+            const drawDate = this.getAttribute('data-draw-date');
+            const card = this.closest('.result-card');
+            const raffleWinnersData = JSON.parse(card.getAttribute('data-raffle-winners'));
+            
+            showRaffleWinners(drawType, drawDate, raffleWinnersData);
+        });
+    });
+}
+
+// Close modal
+closeModal.addEventListener('click', function() {
+    raffleModal.classList.remove('active');
+    document.body.style.overflow = '';
+});
+
+// Close modal when clicking outside
+window.addEventListener('click', function(event) {
+    if (event.target === raffleModal) {
+        raffleModal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+});
 
 // Set up event listeners for filter tabs
 filterTabs.forEach(tab => {
@@ -348,7 +452,85 @@ document.addEventListener('click', function(event) {
     }
 });
 
-// Initial load
-window.addEventListener('DOMContentLoaded', function() {
+// Handle refresh button click
+refreshButton.addEventListener('click', function() {
     fetchResults();
+    
+    // Add rotation animation
+    this.classList.add('rotating');
+    setTimeout(() => {
+        this.classList.remove('rotating');
+    }, 1000);
 });
+
+// FAQ functionality
+faqItems.forEach(item => {
+    const question = item.querySelector('.faq-question');
+    
+    question.addEventListener('click', () => {
+        const isActive = item.classList.contains('active');
+        
+        // Close all other FAQs
+        faqItems.forEach(faq => {
+            faq.classList.remove('active');
+        });
+        
+        // Toggle current FAQ
+        if (!isActive) {
+            item.classList.add('active');
+        }
+    });
+});
+
+// Create game-specific pages with historical data
+function saveGameSpecificData() {
+    const savedData = loadResultsFromStorage();
+    
+    if (savedData && savedData.results) {
+        const mega7Results = savedData.results.filter(result => result.draw_type === 'Mega7');
+        const easy6Results = savedData.results.filter(result => result.draw_type === 'Easy6');
+        const fast5Results = savedData.results.filter(result => result.draw_type === 'Fast5');
+        
+        localStorage.setItem('mega7_results', JSON.stringify(mega7Results));
+        localStorage.setItem('easy6_results', JSON.stringify(easy6Results));
+        localStorage.setItem('fast5_results', JSON.stringify(fast5Results));
+    }
+}
+
+// Initial setup
+function initialSetup() {
+    // Load theme preference
+    loadThemePreference();
+    
+    // Check for cached results
+    const cachedData = loadResultsFromStorage();
+    
+    if (cachedData) {
+        // Display cached results
+        resultsContainer.innerHTML = '';
+        
+        cachedData.results.forEach((result, index) => {
+            const card = createResultCard(result, index);
+            resultsContainer.appendChild(card);
+        });
+        
+        // Add event listeners to view winners buttons
+        setupRaffleButtons();
+        
+        // Apply any active filters
+        const activeFilter = document.querySelector('.filter-tab.active').getAttribute('data-filter');
+        filterResults(activeFilter);
+        
+        // Update the timestamp
+        updateLastUpdatedTime();
+    } else {
+        // No cached data, fetch new
+        fetchResults();
+    }
+    
+    // Save game-specific data
+    saveGameSpecificData();
+}
+
+// Initialize on page load
+window.addEventListener('DOMContentLoaded', initialSetup);

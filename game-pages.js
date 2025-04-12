@@ -3,23 +3,17 @@
 const RESULTS_STORAGE_KEY = 'emirates_draw_results';
 const DARK_MODE_STORAGE_KEY = 'dark_mode_enabled';
 
-// Game-specific storage keys
-const MEGA7_RESULTS_KEY = 'mega7_results';
-const EASY6_RESULTS_KEY = 'easy6_results';
-const FAST5_RESULTS_KEY = 'fast5_results';
-
 // Elements
 const updateTimeElement = document.getElementById('update-time');
 const mega7ResultsContainer = document.getElementById('mega7-results-container');
+const easy6ResultsContainer = document.getElementById('easy6-results-container');
+const fast5ResultsContainer = document.getElementById('fast5-results-container');
 const themeToggle = document.getElementById('theme-toggle');
 const mobileMenuButton = document.querySelector('.mobile-menu-button');
 const mobileMenu = document.querySelector('.menu');
-const raffleModal = document.getElementById('raffle-modal');
-const closeModal = document.querySelector('.close-modal');
-const modalWinnersList = document.getElementById('modal-winners-list');
-const body = document.body;
 const refreshButton = document.getElementById('refresh-button');
 const refreshToast = document.getElementById('refresh-toast');
+const body = document.body;
 
 // Check for saved theme preference
 function loadThemePreference() {
@@ -34,14 +28,16 @@ function loadThemePreference() {
 }
 
 // Toggle theme
-themeToggle.addEventListener('click', function() {
-    body.classList.toggle('dark-mode');
-    body.classList.toggle('light-mode');
-    
-    // Save preference
-    const isDarkMode = body.classList.contains('dark-mode');
-    localStorage.setItem(DARK_MODE_STORAGE_KEY, isDarkMode);
-});
+if (themeToggle) {
+    themeToggle.addEventListener('click', function() {
+        body.classList.toggle('dark-mode');
+        body.classList.toggle('light-mode');
+        
+        // Save preference
+        const isDarkMode = body.classList.contains('dark-mode');
+        localStorage.setItem(DARK_MODE_STORAGE_KEY, isDarkMode);
+    });
+}
 
 // Format date to display in a more readable format
 function formatDate(dateStr) {
@@ -110,38 +106,20 @@ function createResultCard(result, index, gameType) {
     const delay = index * 0.1;
     card.style.animationDelay = `${delay}s`;
     
-    // Determine if we're on a game-specific page or the main page
-    const isGamePage = window.location.pathname.includes(result.draw_type.toLowerCase()) || 
-                      (window.location.pathname.includes('mega7') && result.draw_type === 'Mega7') ||
-                      (window.location.pathname.includes('easy6') && result.draw_type === 'Easy6') ||
-                      (window.location.pathname.includes('fast5') && result.draw_type === 'Fast5');
-    
-    let raffleWinnersHTML = '';
-    
-    if (isGamePage) {
-        // On game-specific pages, display raffle winners directly
-        raffleWinnersHTML = `
-            <div class="raffle-winners">
-                <h4>Raffle Winners</h4>
-                <div class="raffle-winners-list">
-                    ${raffleWinners.map(winner => `
-                        <div class="raffle-winner-item">
-                            <span class="raffle-winner-id">${winner.id}</span>
-                            <span class="raffle-prize">${winner.prize}</span>
-                        </div>
-                    `).join('')}
-                </div>
+    // Display raffle winners directly on game-specific pages
+    const raffleWinnersHTML = `
+        <div class="raffle-winners">
+            <h4>Raffle Winners</h4>
+            <div class="raffle-winners-list">
+                ${raffleWinners.map(winner => `
+                    <div class="raffle-winner-item">
+                        <span class="raffle-winner-id">${winner.id}</span>
+                        <span class="raffle-prize">${winner.prize}</span>
+                    </div>
+                `).join('')}
             </div>
-        `;
-    } else {
-        // On the main page, use the modal
-        raffleWinnersHTML = `
-            <div class="raffle-winners">
-                <h4>Raffle Winners</h4>
-                <button class="view-winners-btn" data-draw-type="${result.draw_type}" data-draw-date="${result.date}">Click to View</button>
-            </div>
-        `;
-    }
+        </div>
+    `;
     
     card.innerHTML = `
         <div class="card-header ${result.draw_type}">
@@ -180,40 +158,15 @@ function createResultCard(result, index, gameType) {
         </div>
     `;
     
-    // Store raffle winners data as a custom attribute
-    card.setAttribute('data-raffle-winners', JSON.stringify(raffleWinners));
-    
     return card;
-}
-
-// Show raffle winners in modal
-function showRaffleWinners(drawType, drawDate, raffleWinners) {
-    // Clear existing content
-    modalWinnersList.innerHTML = '';
-    
-    // Create winner elements
-    raffleWinners.forEach(winner => {
-        const winnerItem = document.createElement('div');
-        winnerItem.className = 'modal-winner-item';
-        winnerItem.innerHTML = `
-            <span class="modal-winner-id">${winner.id}</span>
-            <span class="modal-prize-amount">${winner.prize}</span>
-        `;
-        modalWinnersList.appendChild(winnerItem);
-    });
-    
-    // Show modal
-    raffleModal.classList.add('active');
-    document.body.style.overflow = 'hidden'; // Prevent background scrolling
 }
 
 // Update the last updated time
 function updateLastUpdatedTime() {
     const now = new Date();
     
-    // Convert to IST (UTC+5:30)
-    const istOptions = { 
-        timeZone: 'Asia/Kolkata',
+    // Format the date and time
+    const options = { 
         day: '2-digit',
         month: 'long', 
         year: 'numeric',
@@ -223,10 +176,10 @@ function updateLastUpdatedTime() {
         hour12: true
     };
     
-    const istTimeString = now.toLocaleString('en-US', istOptions) + ' IST';
+    const timeString = now.toLocaleString('en-US', options) + ' IST';
     
     if (updateTimeElement) {
-        updateTimeElement.textContent = istTimeString;
+        updateTimeElement.textContent = timeString;
     }
 }
 
@@ -242,79 +195,80 @@ function showToast() {
     }
 }
 
-// Load results from local storage
-function loadResultsFromStorage() {
-    const savedData = localStorage.getItem(RESULTS_STORAGE_KEY);
-    if (savedData) {
-        return JSON.parse(savedData);
-    }
-    return null;
-}
-
-// Load game-specific results
-function loadGameResults(gameType) {
-    let gameKey;
+// Load results from local storage or fetch from data.json
+function loadResults(gameType, container) {
+    if (!container) return;
     
-    switch(gameType) {
-        case 'Mega7':
-            gameKey = MEGA7_RESULTS_KEY;
-            break;
-        case 'Easy6':
-            gameKey = EASY6_RESULTS_KEY;
-            break;
-        case 'Fast5':
-            gameKey = FAST5_RESULTS_KEY;
-            break;
-        default:
-            gameKey = RESULTS_STORAGE_KEY;
-    }
+    // Show loading animation
+    container.innerHTML = `
+        <div class="loading-placeholder">
+            <div class="loading-card"></div>
+            <div class="loading-card"></div>
+        </div>
+    `;
     
-    const savedData = localStorage.getItem(gameKey);
-    if (savedData) {
-        return JSON.parse(savedData);
-    }
-    
-    // If game-specific data doesn't exist, try to filter from all results
-    const allResults = loadResultsFromStorage();
-    if (allResults && allResults.results) {
-        const filteredResults = allResults.results.filter(result => result.draw_type === gameType);
-        return filteredResults;
-    }
-    
-    return [];
-}
-
-// Setup event listeners for raffle winner buttons
-function setupRaffleButtons() {
-    const viewWinnersButtons = document.querySelectorAll('.view-winners-btn');
-    
-    viewWinnersButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const drawType = this.getAttribute('data-draw-type');
-            const drawDate = this.getAttribute('data-draw-date');
-            const card = this.closest('.result-card');
-            const raffleWinnersData = JSON.parse(card.getAttribute('data-raffle-winners'));
+    // Load results from data.json
+    fetch('data.json')
+        .then(response => response.json())
+        .then(data => {
+            if (data && data.results) {
+                const filteredResults = data.results.filter(result => result.draw_type === gameType);
+                
+                if (filteredResults.length > 0) {
+                    // Clear loading placeholders
+                    container.innerHTML = '';
+                    
+                    // Display results
+                    filteredResults.forEach((result, index) => {
+                        const card = createResultCard(result, index, gameType);
+                        container.appendChild(card);
+                    });
+                    
+                    // Save to localStorage
+                    localStorage.setItem(RESULTS_STORAGE_KEY, JSON.stringify(data));
+                    
+                    // Update last updated time
+                    updateLastUpdatedTime();
+                } else {
+                    // No results found for this game type
+                    container.innerHTML = `<p class="no-results">No results found for ${gameType}. Please check back later.</p>`;
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error loading results:', error);
             
-            showRaffleWinners(drawType, drawDate, raffleWinnersData);
+            // Try to use cached data if available
+            const cachedData = localStorage.getItem(RESULTS_STORAGE_KEY);
+            if (cachedData) {
+                try {
+                    const data = JSON.parse(cachedData);
+                    if (data && data.results) {
+                        const filteredResults = data.results.filter(result => result.draw_type === gameType);
+                        
+                        if (filteredResults.length > 0) {
+                            // Clear loading placeholders
+                            container.innerHTML = '';
+                            
+                            // Display results
+                            filteredResults.forEach((result, index) => {
+                                const card = createResultCard(result, index, gameType);
+                                container.appendChild(card);
+                            });
+                        } else {
+                            // No results found for this game type
+                            container.innerHTML = `<p class="no-results">No results found for ${gameType}. Please check back later.</p>`;
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error parsing cached data:', e);
+                    container.innerHTML = `<p class="error">Error loading results. Please try again later.</p>`;
+                }
+            } else {
+                container.innerHTML = `<p class="error">Error loading results. Please try again later.</p>`;
+            }
         });
-    });
 }
-
-// Close modal
-if (closeModal) {
-    closeModal.addEventListener('click', function() {
-        raffleModal.classList.remove('active');
-        document.body.style.overflow = '';
-    });
-}
-
-// Close modal when clicking outside
-window.addEventListener('click', function(event) {
-    if (event.target === raffleModal) {
-        raffleModal.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-});
 
 // Mobile menu toggle
 if (mobileMenuButton) {
@@ -327,102 +281,58 @@ if (mobileMenuButton) {
 // Close mobile menu when clicking a link
 document.querySelectorAll('.menu a').forEach(link => {
     link.addEventListener('click', function() {
-        mobileMenuButton.classList.remove('active');
-        mobileMenu.classList.remove('active');
+        if (mobileMenuButton) {
+            mobileMenuButton.classList.remove('active');
+        }
+        if (mobileMenu) {
+            mobileMenu.classList.remove('active');
+        }
     });
 });
 
 // Close mobile menu when clicking outside
 document.addEventListener('click', function(event) {
-    if (!event.target.closest('.mobile-menu-button') && 
-        !event.target.closest('.menu') && 
-        mobileMenu.classList.contains('active')) {
-        mobileMenuButton.classList.remove('active');
-        mobileMenu.classList.remove('active');
+    if (mobileMenu && mobileMenuButton) {
+        if (!event.target.closest('.mobile-menu-button') && 
+            !event.target.closest('.menu') && 
+            mobileMenu.classList.contains('active')) {
+            mobileMenuButton.classList.remove('active');
+            mobileMenu.classList.remove('active');
+        }
     }
 });
-
-// Load Mega7 results if on Mega7 page
-function loadMega7Results() {
-    if (mega7ResultsContainer) {
-        const mega7Results = loadGameResults('Mega7');
-        
-        if (mega7Results && mega7Results.length > 0) {
-            mega7ResultsContainer.innerHTML = '';
-            
-            mega7Results.forEach((result, index) => {
-                const card = createResultCard(result, index, 'Mega7');
-                mega7ResultsContainer.appendChild(card);
-            });
-            
-            // Add event listeners to view winners buttons
-            setupRaffleButtons();
-        } else {
-            // Use demo data if no results found
-            useMega7DemoData();
-        }
-    }
-}
-
-// Use demo data for Mega7 page
-function useMega7DemoData() {
-    const mega7DemoData = [
-        {
-            "draw_type": "Mega7",
-            "date": "06-04-2025",
-            "winning_numbers": "19, 18, 15, 10, 26, 25, 20",
-            "winning_raffleids": "24401196 - AED 100,000| 24348184 - AED 1,000| 24398732 - AED 1,000| 24401284 - AED 1,000| 24390195 - AED 1,000| 24351351 - AED 1,000",
-            "total_winners": "888",
-            "total_prizes": "AED 126,827",
-            "pick_1_image_url": null
-        },
-        {
-            "draw_type": "Mega7",
-            "date": "30-03-2025",
-            "winning_numbers": "22, 14, 35, 05, 18, 31, 10",
-            "winning_raffleids": "24321196 - AED 100,000| 24318184 - AED 1,000| 24328732 - AED 1,000| 24301284 - AED 1,000",
-            "total_winners": "756",
-            "total_prizes": "AED 104,000",
-            "pick_1_image_url": null
-        }
-    ];
-    
-    mega7ResultsContainer.innerHTML = '';
-    
-    mega7DemoData.forEach((result, index) => {
-        const card = createResultCard(result, index, 'Mega7');
-        mega7ResultsContainer.appendChild(card);
-    });
-    
-    // Add event listeners to view winners buttons
-    setupRaffleButtons();
-}
 
 // Handle refresh button click
 if (refreshButton) {
     refreshButton.addEventListener('click', function() {
-        // Reload the page data and show toast notification
+        // Show toast notification
         showToast();
         
-        // For demo purposes, reload after a short delay
-        setTimeout(() => {
-            loadMega7Results();
-            updateLastUpdatedTime();
-        }, 500);
+        // Reload the appropriate results based on the current page
+        if (window.location.pathname.includes('mega7') && mega7ResultsContainer) {
+            loadResults('Mega7', mega7ResultsContainer);
+        } else if (window.location.pathname.includes('easy6') && easy6ResultsContainer) {
+            loadResults('Easy6', easy6ResultsContainer);
+        } else if (window.location.pathname.includes('fast5') && fast5ResultsContainer) {
+            loadResults('Fast5', fast5ResultsContainer);
+        }
     });
 }
 
-// Initial setup
-function initialSetup() {
+// Initialize on page load
+window.addEventListener('DOMContentLoaded', function() {
     // Load theme preference
     loadThemePreference();
     
     // Update the timestamp
     updateLastUpdatedTime();
     
-    // If on Mega7 page, load Mega7 results
-    loadMega7Results();
-}
-
-// Initialize on page load
-window.addEventListener('DOMContentLoaded', initialSetup);
+    // Load the appropriate results based on the current page
+    if (window.location.pathname.includes('mega7') && mega7ResultsContainer) {
+        loadResults('Mega7', mega7ResultsContainer);
+    } else if (window.location.pathname.includes('easy6') && easy6ResultsContainer) {
+        loadResults('Easy6', easy6ResultsContainer);
+    } else if (window.location.pathname.includes('fast5') && fast5ResultsContainer) {
+        loadResults('Fast5', fast5ResultsContainer);
+    }
+});

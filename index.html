@@ -1,421 +1,192 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Emirates Draw Results Hub</title>
-    <meta name="description" content="Latest Emirates Draw Results - Mega7, Easy6, Fast5. Check Emirates draw results today and winning numbers for all Emirates Draw games." />
-    <meta name="keywords" content="Emirates Draw, lottery results, Mega7, Easy6, Fast5, UAE lottery, raffle winners, Emirates draw results today" />
-    <link rel="icon" href="https://i0.wp.com/emiratesdrawwinners.com/wp-content/uploads/2024/11/cropped-emirates-logo.webp?w=512&ssl=1" type="image/webp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emirates Draw Results</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Schema Markup -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "Emirates Draw Results Hub",
-        "url": "https://emiratesdrawwinners.com/",
-        "description": "Get the latest Emirates Draw results for Mega7, Easy6, and Fast5 games.",
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": "https://emiratesdrawwinners.com/search?q={search_term_string}",
-          "query-input": "required name=search_term_string"
-        }
-      }
-    </script>
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "What is Emirates Draw?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Emirates Draw is the UAE's leading gaming operator that offers participants the opportunity to win incredible prizes while supporting environmental conservation initiatives."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How often are Emirates Draw results announced?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Emirates Draw results are announced weekly: MEGA7 on Sundays, EASY6 on Fridays, and FAST5 on Saturdays."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "How much can I win in Emirates Draw?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "You can win up to AED 100,000,000 in the MEGA7 Grand Prize, AED 15,000,000 in EASY6, and AED 25,000 in FAST5."
-            }
-          }
-        ]
-      }
-    </script>
-  </head>
-
-  <body class="light-mode">
-    <div class="theme-toggle-container">
-      <button id="theme-toggle" aria-label="Toggle dark/light mode">
-        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="5"></circle>
-          <line x1="12" y1="1" x2="12" y2="3"></line>
-          <line x1="12" y1="21" x2="12" y2="23"></line>
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-          <line x1="1" y1="12" x2="3" y2="12"></line>
-          <line x1="21" y1="12" x2="23" y2="12"></line>
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-        </svg>
-        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-        </svg>
-      </button>
-    </div>
-    
-    <div class="floating-refresh-button" id="refresh-button" aria-label="Refresh data">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M23 4v6h-6"></path>
-        <path d="M1 20v-6h6"></path>
-        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-      </svg>
-    </div>
-    
-    <div class="toast-notification" id="refresh-toast">
-      <div class="toast-content">
-        <svg class="toast-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="20 6 9 17 4 12"></polyline>
-        </svg>
-        <span>Results updated successfully!</span>
-      </div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="light-mode">
+    <div class="toast" id="refresh-toast">
+        <div class="toast-content">
+            <i class="fas fa-check-circle"></i>
+            <div class="toast-message">Results refreshed successfully!</div>
+        </div>
     </div>
     
     <header>
-      <div class="container">
-        <nav>
-          <div class="logo">
-            <img src="https://i0.wp.com/emiratesdrawwinners.com/wp-content/uploads/2024/11/cropped-emirates-logo.webp?w=512&ssl=1" alt="Emirates Draw Logo">
-            <h1>Emirates Draw</h1>
-          </div>
-          
-          <div class="nav-right">
-            <div class="menu-container">
-              <div class="mobile-menu-button">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-              
-              <ul class="menu">
+        <div class="logo">
+            <a href="index.html">
+                <img src="https://emiratesdraw.com/images/logo.png" alt="Emirates Draw">
+            </a>
+        </div>
+        <nav class="menu">
+            <ul>
                 <li><a href="index.html" class="active">Home</a></li>
                 <li><a href="mega7.html">Mega7</a></li>
                 <li><a href="easy6.html">Easy6</a></li>
                 <li><a href="fast5.html">Fast5</a></li>
                 <li><a href="blog.html">Blog</a></li>
-              </ul>
-            </div>
-          </div>
-        </nav>
-      </div>
-    </header>
-
-    <main>
-      <div class="container">
-        <div class="jackpot-banner">
-          <div class="jackpot-content">
-            <div class="jackpot-info">
-              <h2>Next Draw Jackpot</h2>
-              <div class="prize-amount">AED 100,000,000</div>
-              <p class="countdown">Draw Date: April 21st, 2025</p>
-              <a href="https://emiratesdraw.com" class="play-button">Play Now</a>
-            </div>
-            <div class="jackpot-image">
-              <img src="https://i0.wp.com/emiratesdrawwinners.com/wp-content/uploads/2024/11/emirates-results-today.jpg?resize=1024%2C538&ssl=1" alt="Emirates Draw Jackpot">
-            </div>
-          </div>
-        </div>
-        
-        <div class="content-section">
-          <div class="content-text">
-            <p>Emirates Lucky Draw is one of the biggest tournaments in the world and attracts players from all over. Check your latest Emirates draw results today. This raffle aims to better the lives of Dubai's inhabitants, and a substantial portion of the proceeds will go to Fujairah's Coral Reef Program, which protects biodiversity and marine life. This is one of the unique draws held in Dubai for Dubai Residents and other Country people.</p>
-          </div>
-        </div>
-        
-        <h2 class="section-title">Latest Draw Results</h2>
-        <div class="last-updated">
-          <span>Last Updated: </span>
-          <span id="update-time">Fetching...</span>
-        </div>
-        
-        <div class="refresh-status">
-          <div class="spinner" id="loading-spinner"></div>
-          <p id="refresh-message">Fetching latest results...</p>
-        </div>
-        
-        <div class="results-wrapper">
-          <div class="filter-tabs">
-            <button class="filter-tab active" data-filter="all">All Results</button>
-            <button class="filter-tab" data-filter="Mega7">Mega7</button>
-            <button class="filter-tab" data-filter="Easy6">Easy6</button>
-            <button class="filter-tab" data-filter="Fast5">Fast5</button>
-          </div>
-          <div id="results-container" class="results-container">
-            <!-- Results will be populated here by JavaScript -->
-            <div class="loading-placeholder">
-              <div class="loading-card"></div>
-              <div class="loading-card"></div>
-              <div class="loading-card"></div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="content-section">
-          <h2 class="section-title">Emirates Draw Results Today Winning Numbers</h2>
-          <div class="content-text">
-            <p>Here are the latest results and winning numbers from the Emirates Draw for today's winner. You can check Emirates Draw's most updated results and winning numbers. This page is updated daily.</p>
-          </div>
-        </div>
-        
-        <div class="game-info">
-          <div class="game-info-card mega7-info">
-            <div class="info-header">
-              <h3>Mega7</h3>
-            </div>
-            <div class="info-content">
-              <p>7 numbers from 1-35</p>
-              <p>Match 7 numbers to win AED 100,000,000</p>
-              <p>Draw held every Sunday at 9 PM</p>
-              <a href="mega7.html" class="info-button">Learn More</a>
-            </div>
-          </div>
-          
-          <div class="game-info-card easy6-info">
-            <div class="info-header">
-              <h3>Easy6</h3>
-            </div>
-            <div class="info-content">
-              <p>6 numbers from 1-42</p>
-              <p>Match 6 numbers to win AED 15,000,000</p>
-              <p>Draw held every Friday at 9 PM</p>
-              <a href="easy6.html" class="info-button">Learn More</a>
-            </div>
-          </div>
-          
-          <div class="game-info-card fast5-info">
-            <div class="info-header">
-              <h3>Fast5</h3>
-            </div>
-            <div class="info-content">
-              <p>5 numbers from 1-35</p>
-              <p>Match 5 numbers to win AED 25,000</p>
-              <p>Draw held every Saturday at 9 PM</p>
-              <a href="fast5.html" class="info-button">Learn More</a>
-            </div>
-          </div>
-        </div>
-        
-        <div class="content-section">
-          <h2 class="section-title">A Quick Guide for Emirates Draw</h2>
-          <div class="content-text">
-            <p>It is the latest and most prominent attraction to open in Dubai, which frequently happens weekly. This draw is earmarked for the residents of Dubai and takes place every Saturday.</p>
-            <p>To participate in this draw, you have to purchase emirates draw ticket for AED 50 only. You need to buy it from the Emirates Draw official website at www.emiratesdraw.com.</p>
-            <p>It is a real-time lottery draw organized in Dubai, where all the participants are given an equal chance to win millions of AED.</p>
-            <p>The lucky person who gets any of these six winning numbers is declared a winner and receives AED 15,000 in prize money. There is a winning price of AED 77,777,777, which is the most considerable price ever in the history of lotteries in Dubai. Please refer to Emirates Draw's official website for more details.</p>
-            <p>The draw is entirely online. All players need to do is buy a ticket for AED 50.</p>
-            
-            <h3>What is Emirates Draw UAE?</h3>
-            <p>It is an eco-friendly draw in Dubai for residents and non-residents. Emirates lucky draw is held every day. It provides an opportunity to win millions in one go. An average participant can win a minimum of AED 15,000. Register yourself at www.emiratesdraw.com.</p>
-            <p>Emirates Draw is derived from the fact that it involves the entire Emirates region, which is the world's largest drawing lottery. The lives of the locals are affected by each Emirates Lottery ticket purchase. It contributes a substantial portion of the profits to Fujairah's Coral Reef Program, which protects biodiversity and marine life. It is a mission that also helps to raise the people's standard of living.</p>
-            
-            <h3>How to Increase Chances of Winning in Emirates Draw?</h3>
-            <p>Here, luck is the only thing that matters, and you can increase your chances of winning by purchasing more tickets. The more tickets that you buy, the greater chance you have to get a winning number.</p>
-            
-            <h3>Emirates Draw Prize List</h3>
-            <p>Every week, Emirates Draw presents seven prizes to seven deserving winners. Finally, the person who matches all seven winning numbers will be the first to be chosen in the main draw. Details are listed below.</p>
-            <ul>
-              <li>Prize for matching 7 out of 7 numbers - 77,777,777 Dirhams</li>
-              <li>Prize for matching 6 out of 7 numbers - 777,777 Dirhams</li>
-              <li>Prize for matching 5 out of 7 numbers - 77,777 Dirhams</li>
-              <li>Prize for matching 4 out of 7 numbers - 7,777 Dirhams</li>
-              <li>Prize for matching 3 out of 7 numbers - 777 Dirhams</li>
-              <li>Prize for matching 2 out of 7 numbers - 77 Dirhams</li>
             </ul>
-            
-            <h3>How To Enter into Emirates Draw?</h3>
-            <p>Just create an account with Emirates Draw and then play the lottery game. Login with the details and buy the tickets as per your wish from the official app and website. You can also purchase tickets before the draw.</p>
-            <p>You can also choose to have a perk that assigns you a seven-digit number or the system will do it for you. Lock your selected numbers; once you have locked them, no one can choose them.</p>
-            <p>Enter on the website and check your lottery result page for the results of the main draw prize winners on that particular day of the week.</p>
-            
-            <h3>Emirates Draw Results</h3>
-            <p>You will have to wait a week to check the results. Visit the official website to learn more about Emirates and other Dubai draws. Every Sunday at 9:00 PM, Emirates Draw will begin streaming live.</p>
-            <p>The results can also be viewed live on YouTube and other social media platforms. Additionally, all winners will get email and SMS notifications at the registered email and mobile number they provide while registering.</p>
-            
-            <h3>Official Contact Details</h3>
-            <p>You can contact them through their official website. Their customer service centre number is +971 9 237 7723, and one can also contact them by email at: customersupport@emiratesdraw.com.</p>
-          </div>
+        </nav>
+        <div class="header-right">
+            <button id="theme-toggle">
+                <i class="fas fa-moon"></i>
+                <span>Dark Mode</span>
+            </button>
+            <button class="mobile-menu-button">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
+    </header>
+    
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Emirates Draw Results</h1>
+                <p>Check the latest results for Mega7, Easy6, and Fast5 draws</p>
+                <div class="actions">
+                    <a href="#latest-results" class="btn primary">View Latest Results</a>
+                    <a href="blog.html" class="btn secondary">Read Our Blog</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://emiratesdraw.com/images/hero-image.png" alt="Emirates Draw">
+            </div>
+        </section>
         
-        <div class="blog-section">
-          <h2 class="section-title">Latest Blog Posts</h2>
-          <div class="blog-container">
-            <div class="blog-card">
-              <div class="blog-image">
-                <img src="https://i0.wp.com/emiratesdrawwinners.com/wp-content/uploads/2024/11/emirates-results-today.jpg?resize=1024%2C538&ssl=1" alt="How to Choose Lucky Numbers">
-              </div>
-              <div class="blog-content">
-                <div class="blog-date">April 10, 2025</div>
-                <h3 class="blog-title">How to Choose Lucky Numbers for Emirates Draw</h3>
-                <p class="blog-excerpt">Learn strategies and tips on how to select potential winning numbers for Emirates Draw games. From birthdays to statistical analysis, discover what might work for you.</p>
-                <a href="blog-lucky-numbers.html" class="read-more">Read More</a>
-              </div>
+        <section id="latest-results" class="latest-results">
+            <div class="section-header">
+                <h2>Latest Draw Results</h2>
+                <div class="updates">
+                    <span>Last Updated: <span id="update-time">Loading...</span></span>
+                    <button id="refresh-button" class="refresh-btn">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
             </div>
             
-            <div class="blog-card">
-              <div class="blog-image">
-                <img src="https://i0.wp.com/emiratesdrawwinners.com/wp-content/uploads/2024/11/emirates-results-today.jpg?resize=1024%2C538&ssl=1" alt="Recent Big Winners">
-              </div>
-              <div class="blog-content">
-                <div class="blog-date">April 5, 2025</div>
-                <h3 class="blog-title">Recent Big Winners and Their Life-Changing Stories</h3>
-                <p class="blog-excerpt">Meet some of the recent Emirates Draw winners who had their lives transformed overnight. From paying off debts to starting new businesses, these stories will inspire you.</p>
-                <a href="blog-winners-stories.html" class="read-more">Read More</a>
-              </div>
+            <div class="results-tabs">
+                <div class="tab active" data-tab="all">All Results</div>
+                <div class="tab" data-tab="Mega7">Mega7</div>
+                <div class="tab" data-tab="Easy6">Easy6</div>
+                <div class="tab" data-tab="Fast5">Fast5</div>
             </div>
-          </div>
-        </div>
+            
+            <div class="results-container" id="all-results-container">
+                <!-- Results will be loaded here -->
+            </div>
+        </section>
         
-        <div class="faq-section">
-          <h2 class="section-title">Frequently Asked Questions</h2>
-          <div class="faq-container">
-            <div class="faq-item">
-              <div class="faq-question">
-                <h3>What is Emirates Draw?</h3>
-                <div class="faq-icon">+</div>
-              </div>
-              <div class="faq-answer">
-                <p>Emirates Draw is the UAE's leading gaming operator that offers participants the opportunity to win incredible prizes while supporting environmental conservation initiatives.</p>
-              </div>
+        <section class="cta">
+            <div class="cta-content">
+                <h2>Ready to Try Your Luck?</h2>
+                <p>Join millions of participants in the Emirates Draw for a chance to win life-changing prizes!</p>
+                <a href="https://emiratesdraw.com" class="btn primary" target="_blank">Participate Now</a>
+            </div>
+        </section>
+        
+        <section class="featured-blog">
+            <div class="section-header">
+                <h2>Featured Articles</h2>
+                <a href="blog.html" class="view-all">View All Articles</a>
             </div>
             
-            <div class="faq-item">
-              <div class="faq-question">
-                <h3>How often are Emirates Draw results announced?</h3>
-                <div class="faq-icon">+</div>
-              </div>
-              <div class="faq-answer">
-                <p>Emirates Draw results are announced weekly: MEGA7 on Sundays, EASY6 on Fridays, and FAST5 on Saturdays.</p>
-              </div>
+            <div class="blog-cards">
+                <div class="blog-card">
+                    <div class="blog-card-image">
+                        <img src="https://emiratesdraw.com/images/blog/lucky-numbers.jpg" alt="Lucky Numbers">
+                    </div>
+                    <div class="blog-card-content">
+                        <h3>Finding Your Lucky Numbers</h3>
+                        <p>Discover strategies for selecting potentially winning numbers for your next draw.</p>
+                        <a href="blog-lucky-numbers.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <div class="blog-card">
+                    <div class="blog-card-image">
+                        <img src="https://emiratesdraw.com/images/blog/winners-stories.jpg" alt="Winners Stories">
+                    </div>
+                    <div class="blog-card-content">
+                        <h3>Recent Winners' Stories</h3>
+                        <p>Read inspiring stories from recent Emirates Draw winners and how it changed their lives.</p>
+                        <a href="blog.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <div class="blog-card">
+                    <div class="blog-card-image">
+                        <img src="https://emiratesdraw.com/images/blog/draw-process.jpg" alt="Draw Process">
+                    </div>
+                    <div class="blog-card-content">
+                        <h3>How the Draw Process Works</h3>
+                        <p>Learn about the transparent and fair process used in the Emirates Draw.</p>
+                        <a href="blog.html" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
             </div>
-            
-            <div class="faq-item">
-              <div class="faq-question">
-                <h3>How much can I win in Emirates Draw?</h3>
-                <div class="faq-icon">+</div>
-              </div>
-              <div class="faq-answer">
-                <p>You can win up to AED 100,000,000 in the MEGA7 Grand Prize, AED 15,000,000 in EASY6, and AED 25,000 in FAST5.</p>
-              </div>
-            </div>
-            
-            <div class="faq-item">
-              <div class="faq-question">
-                <h3>How do I play Emirates Draw?</h3>
-                <div class="faq-icon">+</div>
-              </div>
-              <div class="faq-answer">
-                <p>You can play Emirates Draw by purchasing a ticket online through the official Emirates Draw website or app, or through authorized retailers in the UAE.</p>
-              </div>
-            </div>
-            
-            <div class="faq-item">
-              <div class="faq-question">
-                <h3>How can I check Emirates draw results today?</h3>
-                <div class="faq-icon">+</div>
-              </div>
-              <div class="faq-answer">
-                <p>You can check the latest Emirates draw results today right here on our website. We update the results immediately after each draw is completed.</p>
-              </div>
-            </div>
-            
-            <div class="faq-item">
-              <div class="faq-question">
-                <h3>How are Emirates Draw winners notified?</h3>
-                <div class="faq-icon">+</div>
-              </div>
-              <div class="faq-answer">
-                <p>Winners are notified via email and SMS to the contact details provided during registration. The results are also published on the official Emirates Draw website and social media channels.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+        </section>
     </main>
-
+    
     <footer>
-      <div class="container">
-        <div class="footer-content">
-          <div class="footer-logo">
-            <img src="https://i0.wp.com/emiratesdrawwinners.com/wp-content/uploads/2024/11/cropped-emirates-logo.webp?w=512&ssl=1" alt="Emirates Draw Logo">
-            <h3>Emirates Draw</h3>
-          </div>
-          
-          <div class="footer-links">
-            <div class="footer-column">
-              <h4>Games</h4>
-              <ul>
-                <li><a href="mega7.html">Mega7</a></li>
-                <li><a href="easy6.html">Easy6</a></li>
-                <li><a href="fast5.html">Fast5</a></li>
-              </ul>
+        <div class="footer-top">
+            <div class="footer-logo">
+                <img src="https://emiratesdraw.com/images/logo.png" alt="Emirates Draw">
+                <p>Your chance to win life-changing prizes while making a difference.</p>
             </div>
             
-            <div class="footer-column">
-              <h4>Information</h4>
-              <ul>
-                <li><a href="blog.html">Blog</a></li>
-                <li><a href="contact.html">Contact Us</a></li>
-              </ul>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="mega7.html">Mega7</a></li>
+                        <li><a href="easy6.html">Easy6</a></li>
+                        <li><a href="fast5.html">Fast5</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Contact Us</h4>
+                    <ul>
+                        <li><a href="mailto:info@emiratesdraw.com">info@emiratesdraw.com</a></li>
+                        <li><a href="tel:+97144440459">+971 4 444 0459</a></li>
+                        <li>Emirates Draw LLC, Dubai, UAE</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
             </div>
-            
-            <div class="footer-column">
-              <h4>Support</h4>
-              <ul>
-                <li><a href="faq.html">FAQ</a></li>
-                <li><a href="terms.html">Terms & Conditions</a></li>
-                <li><a href="privacy.html">Privacy Policy</a></li>
-              </ul>
-            </div>
-          </div>
         </div>
         
-        <div class="copyright">
-          <p>&copy; 2025 Emirates Draw Results Hub. All Rights Reserved.</p>
-          <p>Data refreshes automatically. This is not an official Emirates Draw website.</p>
+        <div class="footer-bottom">
+            <p>&copy; 2023 Emirates Draw. All rights reserved.</p>
+            <div class="footer-bottom-links">
+                <a href="#">Terms & Conditions</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Responsible Gaming</a>
+            </div>
         </div>
-      </div>
     </footer>
     
-    <!-- Modal for Raffle Winners -->
-    <div id="raffle-modal" class="modal">
-      <div class="modal-content">
-        <span class="close-modal">&times;</span>
-        <h3>Raffle Winners</h3>
-        <div id="modal-winners-list" class="modal-winners-list">
-          <!-- Raffle winners will be shown here -->
-        </div>
-      </div>
-    </div>
-    
+    <!-- Add the GPT Engineer script tag for Lovable features -->
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script src="script.js"></script>
-  </body>
+    <script src="game-pages.js"></script>
+</body>
 </html>
